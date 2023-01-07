@@ -13,5 +13,5 @@ public class Auction : IKeyEntity
 	public DateTime EndDate { get; set; }
 	public double StartingPrice { get; set; }
 	public double CurrentPrice { get; set; }
-	public bool IsDone { get; set; }
+	public bool IsActive { get; set; }
 }
