@@ -2,12 +2,7 @@
 using ASSE.Core.Services;
 
 namespace ASSE.Service.Interfaces;
-public interface IEntityService<T> : IService
-    where T : class, IKeyEntity, new()
+public interface IEntityService<T> : ICrud<T>
+	where T : class, IKeyEntity, new()
 {
-    int Add(T data);
-    T Get(int id);
-    bool Update(T data);
-    bool Delete(int id);
-    List<T> GetAll();
 }
