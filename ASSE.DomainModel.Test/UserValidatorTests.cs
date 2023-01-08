@@ -1,7 +1,6 @@
 using ASSE.DomainModel.Models;
 using ASSE.DomainModel.Validators;
-using FluentAssertions;
-using Xunit.Sdk;
+using FluentValidation.TestHelper;
 
 namespace ASSE.DomainModel.Test;
 
@@ -25,10 +24,10 @@ public class UserValidatorTests
 			Score = 1,
 		};
 
-		var actual = _validator.Validate(user);
+		var result = _validator.TestValidate(user);
 
-		actual.IsValid.Should().BeTrue();
-		actual.Errors.Should().BeEmpty();
+		//result.IsValid.Should().BeTrue();
+		result.ShouldNotHaveAnyValidationErrors();
 	}
 
 	[Fact]
@@ -36,10 +35,10 @@ public class UserValidatorTests
 	{
 		var user = new User();
 
-		var actual = _validator.Validate(user);
+		var result = _validator.TestValidate(user);
 
-		actual.IsValid.Should().BeFalse();
-		actual.Errors.Should().HaveCountGreaterThan(0);
+		//result.IsValid.Should().BeFalse();
+		result.ShouldHaveAnyValidationError();
 	}
 
 	[Theory]
@@ -55,10 +54,10 @@ public class UserValidatorTests
 			Score = 1,
 		};
 
-		var actual = _validator.Validate(user);
+		var result = _validator.TestValidate(user);
 
-		actual.IsValid.Should().BeFalse();
-		actual.Errors.Should().HaveCount(1);
+		//result.IsValid.Should().BeFalse();
+		result.ShouldHaveValidationErrorFor(user => user.FirstName);
 	}
 
 	[Theory]
@@ -74,10 +73,10 @@ public class UserValidatorTests
 			Score = 1,
 		};
 
-		var actual = _validator.Validate(user);
+		var result = _validator.TestValidate(user);
 
-		actual.IsValid.Should().BeFalse();
-		actual.Errors.Should().HaveCount(1);
+		//result.IsValid.Should().BeFalse();
+		result.ShouldHaveValidationErrorFor(user => user.LastName);
 	}
 
 	[Theory]
@@ -92,9 +91,9 @@ public class UserValidatorTests
 			Score = score,
 		};
 
-		var actual = _validator.Validate(user);
+		var result = _validator.TestValidate(user);
 
-		actual.IsValid.Should().BeFalse();
-		actual.Errors.Should().HaveCountGreaterThan(0);
+		//result.IsValid.Should().BeFalse();
+		result.ShouldHaveValidationErrorFor(user => user.Score);
 	}
 }

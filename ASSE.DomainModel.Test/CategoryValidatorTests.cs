@@ -1,7 +1,6 @@
 ﻿using ASSE.DomainModel.Models;
 using ASSE.DomainModel.Validators;
-using FluentAssertions;
-using FluentValidation;
+using FluentValidation.TestHelper;
 
 namespace ASSE.DomainModel.Test;
 public class CategoryValidatorTests
@@ -23,10 +22,10 @@ public class CategoryValidatorTests
 			Name = "Electronics",
 		};
 
-		var actual = _validator.Validate(category);
+		var result = _validator.TestValidate(category);
 
-		actual.IsValid.Should().BeTrue();
-		actual.Errors.Should().BeEmpty();
+		//result.IsValid.Should().BeTrue();
+		result.ShouldNotHaveAnyValidationErrors();
 	}
 
 	[Fact]
@@ -39,10 +38,10 @@ public class CategoryValidatorTests
 			Name = "Electronics",
 		};
 
-		var actual = _validator.Validate(category);
+		var result = _validator.TestValidate(category);
 
-		actual.IsValid.Should().BeTrue();
-		actual.Errors.Should().BeEmpty();
+		//result.IsValid.Should().BeTrue();
+		result.ShouldNotHaveAnyValidationErrors();
 	}
 
 	[Fact]
@@ -50,10 +49,10 @@ public class CategoryValidatorTests
 	{
 		var category = new Category();
 
-		var actual = _validator.Validate(category);
+		var result = _validator.TestValidate(category);
 
-		actual.IsValid.Should().BeFalse();
-		actual.Errors.Should().HaveCountGreaterThan(0);
+		//result.IsValid.Should().BeFalse();
+		result.ShouldHaveAnyValidationError();
 	}
 
 	[Theory]
@@ -67,9 +66,9 @@ public class CategoryValidatorTests
 			Name = name,
 		};
 
-		var actual = _validator.Validate(category);
+		var result = _validator.TestValidate(category);
 
-		actual.IsValid.Should().BeFalse();
-		actual.Errors.Should().HaveCount(1);
+		//result.IsValid.Should().BeFalse();
+		result.ShouldHaveValidationErrorFor(category => category.Name);
 	}
 }

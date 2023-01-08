@@ -1,8 +1,6 @@
-﻿using System.Xml.Linq;
-using ASSE.DomainModel.Models;
+﻿using ASSE.DomainModel.Models;
 using ASSE.DomainModel.Validators;
-using FluentAssertions;
-using FluentValidation;
+using FluentValidation.TestHelper;
 
 namespace ASSE.DomainModel.Test;
 public class ProductValidatorTests
@@ -24,10 +22,10 @@ public class ProductValidatorTests
 			Name = "Drink",
 		};
 
-		var actual = _validator.Validate(product);
+		var result = _validator.TestValidate(product);
 
-		actual.IsValid.Should().BeTrue();
-		actual.Errors.Should().BeEmpty();
+		//result.IsValid.Should().BeTrue();
+		result.ShouldNotHaveAnyValidationErrors();
 	}
 
 	[Fact]
@@ -35,10 +33,10 @@ public class ProductValidatorTests
 	{
 		var product = new Product();
 
-		var actual = _validator.Validate(product);
+		var result = _validator.TestValidate(product);
 
-		actual.IsValid.Should().BeFalse();
-		actual.Errors.Should().HaveCountGreaterThan(0);
+		//result.IsValid.Should().BeFalse();
+		result.ShouldHaveAnyValidationError();
 	}
 
 	[Fact]
@@ -50,10 +48,10 @@ public class ProductValidatorTests
 			Name = "Drink",
 		};
 
-		var actual = _validator.Validate(product);
+		var result = _validator.TestValidate(product);
 
-		actual.IsValid.Should().BeFalse();
-		actual.Errors.Should().HaveCount(1);
+		//result.IsValid.Should().BeFalse();
+		result.ShouldHaveValidationErrorFor(product => product.CategoryId);
 	}
 
 	[Theory]
@@ -68,9 +66,9 @@ public class ProductValidatorTests
 			Name = name,
 		};
 
-		var actual = _validator.Validate(product);
+		var result = _validator.TestValidate(product);
 
-		actual.IsValid.Should().BeFalse();
-		actual.Errors.Should().HaveCount(1);
+		//result.IsValid.Should().BeFalse();
+		result.ShouldHaveValidationErrorFor(product => product.Name);
 	}
 }

@@ -1,7 +1,6 @@
 ﻿using ASSE.DomainModel.Models;
 using ASSE.DomainModel.Validators;
-using FluentAssertions;
-using FluentValidation;
+using FluentValidation.TestHelper;
 
 namespace ASSE.DomainModel.Test;
 public class RoleValidatorTests
@@ -22,10 +21,10 @@ public class RoleValidatorTests
 			Name = "Admin"
 		};
 
-		var actual = _validator.Validate(role);
+		var result = _validator.TestValidate(role);
 
-		actual.IsValid.Should().BeTrue();
-		actual.Errors.Should().BeEmpty();
+		//result.IsValid.Should().BeTrue();
+		result.ShouldNotHaveAnyValidationErrors();
 	}
 
 	[Fact]
@@ -33,10 +32,10 @@ public class RoleValidatorTests
 	{
 		var role = new Role();
 
-		var actual = _validator.Validate(role);
+		var result = _validator.TestValidate(role);
 
-		actual.IsValid.Should().BeFalse();
-		actual.Errors.Should().HaveCountGreaterThan(0);
+		//result.IsValid.Should().BeFalse();
+		result.ShouldHaveAnyValidationError();
 	}
 
 	[Theory]
@@ -50,9 +49,9 @@ public class RoleValidatorTests
 			Name = name,
 		};
 
-		var actual = _validator.Validate(role);
+		var result = _validator.TestValidate(role);
 
-		actual.IsValid.Should().BeFalse();
-		actual.Errors.Should().HaveCount(1);
+		//result.IsValid.Should().BeFalse();
+		result.ShouldHaveValidationErrorFor(role => role.Name);
 	}
 }

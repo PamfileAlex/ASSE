@@ -1,6 +1,6 @@
 ﻿using ASSE.DomainModel.Models;
 using ASSE.DomainModel.Validators;
-using FluentAssertions;
+using FluentValidation.TestHelper;
 
 namespace ASSE.DomainModel.Test;
 public class CurrencyValidatorTests
@@ -21,10 +21,10 @@ public class CurrencyValidatorTests
 			Name = "RON"
 		};
 
-		var actual = _validator.Validate(currency);
+		var result = _validator.TestValidate(currency);
 
-		actual.IsValid.Should().BeTrue();
-		actual.Errors.Should().BeEmpty();
+		//result.IsValid.Should().BeTrue();
+		result.ShouldNotHaveAnyValidationErrors();
 	}
 
 	[Fact]
@@ -32,10 +32,10 @@ public class CurrencyValidatorTests
 	{
 		var currency = new Currency();
 
-		var actual = _validator.Validate(currency);
+		var result = _validator.TestValidate(currency);
 
-		actual.IsValid.Should().BeFalse();
-		actual.Errors.Should().HaveCountGreaterThan(0);
+		//result.IsValid.Should().BeFalse();
+		result.ShouldHaveAnyValidationError();
 	}
 
 	[Theory]
@@ -49,9 +49,9 @@ public class CurrencyValidatorTests
 			Name = name,
 		};
 
-		var actual = _validator.Validate(currency);
+		var result = _validator.TestValidate(currency);
 
-		actual.IsValid.Should().BeFalse();
-		actual.Errors.Should().HaveCount(1);
+		//result.IsValid.Should().BeFalse();
+		result.ShouldHaveValidationErrorFor(currency => currency.Name);
 	}
 }
