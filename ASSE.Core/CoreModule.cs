@@ -15,5 +15,6 @@ public class CoreModule : Module
 
 		builder.RegisterLogger();
 		builder.RegisterType<ConfigProvider>().As<IConfigProvider>();
+		builder.RegisterType<DateTimeProvider>().As<IDateTimeProvider>();
 	}
 }
