@@ -9,6 +9,6 @@ public class UserValidator : AbstractValidator<User>
 		//RuleFor(x => x.Id).NotEmpty();
 		RuleFor(x => x.FirstName).NotEmpty();
 		RuleFor(x => x.LastName).NotEmpty();
-		RuleFor(x => x.Score).NotEmpty();
+		RuleFor(x => x.Score).NotEmpty().GreaterThan(0.0);
 	}
 }

@@ -6,7 +6,7 @@ public class CategoryValidator : AbstractValidator<Category>
 {
 	public CategoryValidator()
 	{
-		RuleFor(x => x.ParentId).NotEmpty();
+		//RuleFor(x => x.ParentId).NotEmpty();
 		RuleFor(x => x.Name).NotEmpty();
 	}
 }
