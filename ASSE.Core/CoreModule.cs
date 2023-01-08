@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using ASSE.Core.Services;
+using Autofac;
 using AutofacSerilogIntegration;
 using Serilog;
 
@@ -13,5 +14,6 @@ public class CoreModule : Module
 			.CreateLogger();
 
 		builder.RegisterLogger();
+		builder.RegisterType<ConfigProvider>().As<IConfigProvider>();
 	}
 }
