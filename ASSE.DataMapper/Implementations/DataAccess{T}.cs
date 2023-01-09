@@ -32,14 +32,14 @@ public abstract class DataAccess<T> : DataAccess, IDataAccess<T>
 	#endregion
 
 	#region Get Methods
-	public virtual T Get(int id)
+	public virtual T? Get(int id)
 	{
 		using IDbConnection connection = _dbConnectionProvider.GetNewConnection();
 		connection.Open();
 		return Get(id, connection);
 	}
 
-	public virtual T Get(int id, IDbConnection connection, IDbTransaction? transaction = null)
+	public virtual T? Get(int id, IDbConnection connection, IDbTransaction? transaction = null)
 	{
 		return connection.Get<T>(id, transaction);
 	}

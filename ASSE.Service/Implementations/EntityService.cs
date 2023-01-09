@@ -35,7 +35,7 @@ public abstract class EntityService<T, D> : GenericService<D>, IEntityService<T>
 		return default;
 	}
 
-	public virtual T Get(int id)
+	public virtual T? Get(int id)
 	{
 		return _dataAccess.Get(id);
 	}
