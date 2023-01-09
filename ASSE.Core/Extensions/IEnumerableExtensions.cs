@@ -19,8 +19,8 @@ public static class IEnumerableExtensions
 	/// </summary>
 	/// <typeparam name="T">The type of element in the list.</typeparam>
 	/// <param name="source">The enumerable to return as a list.</param>
-	public static List<T> AsList<T>(this IEnumerable<T> source)
-	{
-		return (source == null || source is List<T>) ? (List<T>)source : source.ToList();
-	}
+	//public static List<T> AsList<T>(this IEnumerable<T> source)
+	//{
+	//	return (source == null || source is List<T>) ? (List<T>)source : source.ToList();
+	//}
 }
