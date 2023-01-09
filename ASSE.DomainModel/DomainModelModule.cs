@@ -13,6 +13,7 @@ public class DomainModelModule : Module
 
 		builder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly())
 				.Where(t => t.GetInterfaces().Any(i => i.Equals(typeof(IValidator))))
+				.AsImplementedInterfaces()
 				.AsSelf();
 	}
 }
