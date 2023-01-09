@@ -1,14 +1,23 @@
 ﻿using System.Configuration;
+using Serilog;
 
 namespace ASSE.Core.Services;
 public class ConfigProvider : IConfigProvider
 {
+	private readonly ILogger _logger;
+
 	public string PostgresConnectionString => ConfigurationManager.ConnectionStrings["SQLiteConnection"].ConnectionString;
 	public int MaxAuctions => GetValue<int>("MaxAuctions");
 	public double InitialScore => GetValue<double>("InitialScore");
 
+	public ConfigProvider(ILogger logger)
+	{
+		_logger = logger;
+	}
+
 	public string? GetValue(string key)
 	{
+		_logger.Debug("Attempting to get value from config file with key {key}", key);
 		return ConfigurationManager.AppSettings.Get(key);
 	}
 
@@ -16,11 +25,12 @@ public class ConfigProvider : IConfigProvider
 	{
 		try
 		{
-			string value = ConfigurationManager.AppSettings.Get(key);
+			string value = GetValue(key);
 			return (T)Convert.ChangeType(value, typeof(T));
 		}
 		catch
 		{
+			_logger.Warning("Failed to get value from config file with key {key}", key);
 			return default;
 		}
 	}
