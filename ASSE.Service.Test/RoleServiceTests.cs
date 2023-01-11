@@ -11,7 +11,6 @@ namespace ASSE.Service.Test;
 public class RoleServiceTests
 {
 	private readonly IValidator<Role> _validator;
-	private readonly IValidator<Role> _failingValidator;
 	private readonly Mock<IValidator<Role>> _mockValidator;
 	private readonly Mock<IRoleDataAccess> _mockDataAccess;
 
@@ -20,10 +19,6 @@ public class RoleServiceTests
 		_validator = new RoleValidator();
 		_mockDataAccess = new Mock<IRoleDataAccess>();
 		_mockValidator = new Mock<IValidator<Role>>();
-
-		var validator = new InlineValidator<Role>();
-		validator.RuleFor(x => x.Id).Must(id => false);
-		_failingValidator = validator;
 	}
 
 	public static Role GetValidRole()
@@ -41,7 +36,7 @@ public class RoleServiceTests
 		var data = new Role();
 
 		_mockValidator.Setup(x => x.Validate(data))
-			.Returns(new ValidationResult());
+			.Returns(TestUtils.PassingValidationResult);
 		_mockDataAccess.Setup(x => x.Add(data))
 			.Returns(1);
 
@@ -59,9 +54,8 @@ public class RoleServiceTests
 	{
 		var data = new Role();
 
-		var errors = new List<ValidationFailure>() { new ValidationFailure() };
 		_mockValidator.Setup(x => x.Validate(data))
-			.Returns(new ValidationResult(errors));
+			.Returns(TestUtils.FailingValidationResult);
 		_mockDataAccess.Setup(x => x.Add(data))
 			.Returns(1);
 
@@ -78,7 +72,7 @@ public class RoleServiceTests
 	[InlineData(1)]
 	[InlineData(10)]
 	[InlineData(100)]
-	public void Add_ValidUser_ValidationPasses_ReturnsValidId(int id)
+	public void Add_ValidRole_ValidationPasses_ReturnsValidId(int id)
 	{
 		var data = GetValidRole();
 		_mockDataAccess.Setup(x => x.Add(data))
@@ -93,7 +87,7 @@ public class RoleServiceTests
 	}
 
 	[Fact]
-	public void Add_InvalidUser_ValidationFails_ReturnsDefault()
+	public void Add_InvalidRole_ValidationFails_ReturnsDefault()
 	{
 		var data = new Role();
 		_mockDataAccess.Setup(x => x.Add(data))
@@ -111,42 +105,43 @@ public class RoleServiceTests
 	{
 		yield return new object[] { 1, new Role() { Id = 1, Name = "Admin" } };
 		yield return new object[] { 10, new Role() { Id = 10, Name = "Admin" } };
+		yield return new object[] { 20, null };
 	}
 
 	[Theory]
 	[MemberData(nameof(GetRoleById))]
-	public void GetById_ProvidedId_ReturnsExpected(int id, Role role)
+	public void GetById_ProvidedId_ReturnsExpected(int id, Role? data)
 	{
 		_mockDataAccess.Setup(x => x.Get(id))
-			.Returns(role);
+			.Returns(data);
 
 		var service = new RoleService(_mockDataAccess.Object, _validator);
 
 		var result = service.Get(id);
 
-		result.Should().Be(role);
+		result.Should().Be(data);
 		_mockDataAccess.Verify(x => x.Get(id));
 	}
 
 	private static IEnumerable<object[]> UpdateRoles()
 	{
-		yield return new object[] { true, Times.Once(), new Role() { Id = 1, Name = "Admin" } };
+		yield return new object[] { true, Times.Once(), GetValidRole() };
 		yield return new object[] { false, Times.Never(), new Role() };
 	}
 
 	[Theory]
 	[MemberData(nameof(UpdateRoles))]
-	public void Update_ProvidedRole_ReturnsProvided(bool status, Times times, Role role)
+	public void Update_ProvidedRole_ReturnsProvided(bool status, Times times, Role data)
 	{
-		_mockDataAccess.Setup(x => x.Update(role))
+		_mockDataAccess.Setup(x => x.Update(data))
 			.Returns(status);
 
 		var service = new RoleService(_mockDataAccess.Object, _validator);
 
-		var result = service.Update(role);
+		var result = service.Update(data);
 
 		result.Should().Be(status);
-		_mockDataAccess.Verify(x => x.Update(role), times);
+		_mockDataAccess.Verify(x => x.Update(data), times);
 	}
 
 	[Theory]
@@ -177,16 +172,16 @@ public class RoleServiceTests
 
 	[Theory]
 	[MemberData(nameof(GetAll))]
-	public void GetAll_ProvidedInput_ReturnsProvided(List<Role> roles)
+	public void GetAll_ProvidedInput_ReturnsProvided(List<Role> data)
 	{
 		_mockDataAccess.Setup(x => x.GetAll())
-			.Returns(roles);
+			.Returns(data);
 
 		var service = new RoleService(_mockDataAccess.Object, _validator);
 
 		var result = service.GetAll();
 
-		result.Should().BeEquivalentTo(roles);
+		result.Should().BeEquivalentTo(data);
 		_mockDataAccess.Verify(x => x.GetAll());
 	}
 }

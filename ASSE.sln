@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASSE.DomainModel.Test", "AS
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASSE.Gui.Cli", "ASSE.Gui.Cli\ASSE.Gui.Cli.csproj", "{EDCF73C5-10F2-4CCB-82F9-8CF89DA690D8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASSE.Service.Test", "ASSE.Service.Test\ASSE.Service.Test.csproj", "{FA63FA27-BCE0-4989-893C-35184EA2DF07}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASSE.Service.Test", "ASSE.Service.Test\ASSE.Service.Test.csproj", "{FA63FA27-BCE0-4989-893C-35184EA2DF07}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
