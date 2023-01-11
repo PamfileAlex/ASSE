@@ -3,10 +3,10 @@ using ASSE.DataMapper.Interfaces;
 using ASSE.DomainModel.Models;
 using ASSE.DomainModel.Validators;
 using ASSE.Service.Implementations;
+using ASSE.TestCore;
 using FluentAssertions;
 using FluentValidation;
 using Moq;
-using NSubstitute;
 
 namespace ASSE.Service.Test;
 public class CategoryServiceTests
@@ -37,7 +37,7 @@ public class CategoryServiceTests
 		var data = new Category();
 
 		_mockValidator.Setup(x => x.Validate(data))
-			.Returns(TestUtils.PassingValidationResult);
+			.Returns(ValidationUtils.PassingValidationResult);
 		_mockDataAccess.Setup(x => x.Add(data))
 			.Returns(1);
 
@@ -56,7 +56,7 @@ public class CategoryServiceTests
 		var data = new Category();
 
 		_mockValidator.Setup(x => x.Validate(data))
-			.Returns(TestUtils.FailingValidationResult);
+			.Returns(ValidationUtils.FailingValidationResult);
 		_mockDataAccess.Setup(x => x.Add(data))
 			.Returns(1);
 

@@ -1,10 +1,9 @@
 ﻿using ASSE.Core.Models;
-using ASSE.DomainModel.Models;
 using FluentValidation;
 using FluentValidation.Results;
 
-namespace ASSE.Service.Test;
-public static class TestUtils
+namespace ASSE.TestCore;
+public static class ValidationUtils
 {
 	private static List<ValidationFailure> _errors = new() { new ValidationFailure() };
 

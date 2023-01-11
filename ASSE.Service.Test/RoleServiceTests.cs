@@ -2,6 +2,7 @@
 using ASSE.DomainModel.Models;
 using ASSE.DomainModel.Validators;
 using ASSE.Service.Implementations;
+using ASSE.TestCore;
 using FluentAssertions;
 using FluentValidation;
 using FluentValidation.Results;
@@ -36,7 +37,7 @@ public class RoleServiceTests
 		var data = new Role();
 
 		_mockValidator.Setup(x => x.Validate(data))
-			.Returns(TestUtils.PassingValidationResult);
+			.Returns(ValidationUtils.PassingValidationResult);
 		_mockDataAccess.Setup(x => x.Add(data))
 			.Returns(1);
 
@@ -55,7 +56,7 @@ public class RoleServiceTests
 		var data = new Role();
 
 		_mockValidator.Setup(x => x.Validate(data))
-			.Returns(TestUtils.FailingValidationResult);
+			.Returns(ValidationUtils.FailingValidationResult);
 		_mockDataAccess.Setup(x => x.Add(data))
 			.Returns(1);
 
