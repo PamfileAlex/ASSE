@@ -8,39 +8,41 @@ using FluentValidation;
 using Moq;
 
 namespace ASSE.Service.Test;
-public class RoleServiceTests
+public class UserServiceTests
 {
-	private readonly IValidator<Role> _validator;
-	private readonly Mock<IValidator<Role>> _mockValidator;
-	private readonly Mock<IRoleDataAccess> _mockDataAccess;
+	private readonly IValidator<User> _validator;
+	private readonly Mock<IValidator<User>> _mockValidator;
+	private readonly Mock<IUserDataAccess> _mockDataAccess;
 
-	public RoleServiceTests()
+	public UserServiceTests()
 	{
-		_validator = new RoleValidator();
-		_mockDataAccess = new Mock<IRoleDataAccess>();
-		_mockValidator = new Mock<IValidator<Role>>();
+		_validator = new UserValidator();
+		_mockDataAccess = new Mock<IUserDataAccess>();
+		_mockValidator = new Mock<IValidator<User>>();
 	}
 
-	public static Role GetValidRole()
+	public static User GetValidUser()
 	{
-		return new Role()
+		return new User()
 		{
 			Id = 1,
-			Name = "Admin",
+			FirstName = "Max",
+			LastName = "Verstappen",
+			Score = 650
 		};
 	}
 
 	[Fact]
 	public void Add_ValidatorIsCalled_Passes()
 	{
-		var data = new Role();
+		var data = new User();
 
 		_mockValidator.Setup(x => x.Validate(data))
 			.Returns(ValidationUtils.PassingValidationResult);
 		_mockDataAccess.Setup(x => x.Add(data))
 			.Returns(1);
 
-		var service = new RoleService(_mockDataAccess.Object, _mockValidator.Object);
+		var service = new UserService(_mockDataAccess.Object, _mockValidator.Object);
 
 		var result = service.Add(data);
 
@@ -52,14 +54,14 @@ public class RoleServiceTests
 	[Fact]
 	public void Add_ValidatorIsCalled_Fails()
 	{
-		var data = new Role();
+		var data = new User();
 
 		_mockValidator.Setup(x => x.Validate(data))
 			.Returns(ValidationUtils.FailingValidationResult);
 		_mockDataAccess.Setup(x => x.Add(data))
 			.Returns(1);
 
-		var service = new RoleService(_mockDataAccess.Object, _mockValidator.Object);
+		var service = new UserService(_mockDataAccess.Object, _mockValidator.Object);
 
 		var result = service.Add(data);
 
@@ -74,11 +76,11 @@ public class RoleServiceTests
 	[InlineData(100)]
 	public void Add_ValidRole_ValidationPasses_ReturnsValidId(int id)
 	{
-		var data = GetValidRole();
+		var data = GetValidUser();
 		_mockDataAccess.Setup(x => x.Add(data))
 			.Returns(id);
 
-		var service = new RoleService(_mockDataAccess.Object, _validator);
+		var service = new UserService(_mockDataAccess.Object, _validator);
 
 		var result = service.Add(data);
 
@@ -89,11 +91,11 @@ public class RoleServiceTests
 	[Fact]
 	public void Add_InvalidRole_ValidationFails_ReturnsDefault()
 	{
-		var data = new Role();
+		var data = new User();
 		_mockDataAccess.Setup(x => x.Add(data))
 			.Returns(1);
 
-		var service = new RoleService(_mockDataAccess.Object, _validator);
+		var service = new UserService(_mockDataAccess.Object, _validator);
 
 		var result = service.Add(data);
 
@@ -101,21 +103,21 @@ public class RoleServiceTests
 		_mockDataAccess.Verify(x => x.Add(data), Times.Never());
 	}
 
-	private static IEnumerable<object[]> GetRoleById()
+	private static IEnumerable<object[]> GetUserById()
 	{
-		yield return new object[] { 1, new Role() { Id = 1, Name = "Admin" } };
-		yield return new object[] { 10, new Role() { Id = 10, Name = "Admin" } };
+		yield return new object[] { 1, new User() { Id = 1, FirstName = "Max", LastName = "Verstappen", Score = 650 } };
+		yield return new object[] { 10, new User() { Id = 1, FirstName = "Charles", LastName = "Leclerc", Score = 550 } };
 		yield return new object[] { 20, null };
 	}
 
 	[Theory]
-	[MemberData(nameof(GetRoleById))]
-	public void GetById_ProvidedId_ReturnsExpected(int id, Role? data)
+	[MemberData(nameof(GetUserById))]
+	public void GetById_ProvidedId_ReturnsExpected(int id, User? data)
 	{
 		_mockDataAccess.Setup(x => x.Get(id))
 			.Returns(data);
 
-		var service = new RoleService(_mockDataAccess.Object, _validator);
+		var service = new UserService(_mockDataAccess.Object, _validator);
 
 		var result = service.Get(id);
 
@@ -123,20 +125,20 @@ public class RoleServiceTests
 		_mockDataAccess.Verify(x => x.Get(id));
 	}
 
-	private static IEnumerable<object[]> UpdateRoles()
+	private static IEnumerable<object[]> UpdateUsers()
 	{
-		yield return new object[] { true, Times.Once(), GetValidRole() };
-		yield return new object[] { false, Times.Never(), new Role() };
+		yield return new object[] { true, Times.Once(), GetValidUser() };
+		yield return new object[] { false, Times.Never(), new User() };
 	}
 
 	[Theory]
-	[MemberData(nameof(UpdateRoles))]
-	public void Update_ProvidedRole_ReturnsProvided(bool status, Times times, Role data)
+	[MemberData(nameof(UpdateUsers))]
+	public void Update_ProvidedRole_ReturnsProvided(bool status, Times times, User data)
 	{
 		_mockDataAccess.Setup(x => x.Update(data))
 			.Returns(status);
 
-		var service = new RoleService(_mockDataAccess.Object, _validator);
+		var service = new UserService(_mockDataAccess.Object, _validator);
 
 		var result = service.Update(data);
 
@@ -152,7 +154,7 @@ public class RoleServiceTests
 		_mockDataAccess.Setup(x => x.Delete(It.IsAny<int>()))
 			.Returns(status);
 
-		var service = new RoleService(_mockDataAccess.Object, _validator);
+		var service = new UserService(_mockDataAccess.Object, _validator);
 
 		var result = service.Delete(1);
 
@@ -162,22 +164,22 @@ public class RoleServiceTests
 
 	private static IEnumerable<object[]> GetAll()
 	{
-		yield return new object[] { new List<Role>() };
-		yield return new object[] { new List<Role>() {
-				new Role() { Id = 1, Name = "Admin" },
-				new Role() { Id = 10, Name = "Admin" }
+		yield return new object[] { new List<User>() };
+		yield return new object[] { new List<User>() {
+				new User() { Id = 1, FirstName = "Max", LastName = "Verstappen", Score = 650 },
+				new User() { Id = 1, FirstName = "Charles", LastName = "Leclerc", Score = 550 }
 			}
 		};
 	}
 
 	[Theory]
 	[MemberData(nameof(GetAll))]
-	public void GetAll_ProvidedInput_ReturnsProvided(List<Role> data)
+	public void GetAll_ProvidedInput_ReturnsProvided(List<User> data)
 	{
 		_mockDataAccess.Setup(x => x.GetAll())
 			.Returns(data);
 
-		var service = new RoleService(_mockDataAccess.Object, _validator);
+		var service = new UserService(_mockDataAccess.Object, _validator);
 
 		var result = service.GetAll();
 
