@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ASSE.DataMapper.Interfaces;
+﻿using ASSE.DataMapper.Interfaces;
 using ASSE.DomainModel.Models;
 using ASSE.DomainModel.Validators;
 using ASSE.Service.Implementations;
@@ -132,6 +127,7 @@ public class ProductServiceTests
 	private static IEnumerable<object[]> UpdateProducts()
 	{
 		yield return new object[] { true, Times.Once(), GetValidProduct() };
+		yield return new object[] { false, Times.Never(), new Product() { Id = 1 } };
 		yield return new object[] { false, Times.Never(), new Product() };
 	}
 

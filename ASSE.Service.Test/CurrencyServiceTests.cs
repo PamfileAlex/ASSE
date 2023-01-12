@@ -126,6 +126,7 @@ public class CurrencyServiceTests
 	private static IEnumerable<object[]> UpdateCurrencies()
 	{
 		yield return new object[] { true, Times.Once(), GetValidCurrency() };
+		yield return new object[] { false, Times.Never(), new Currency() { Id = 1 } };
 		yield return new object[] { false, Times.Never(), new Currency() };
 	}
 

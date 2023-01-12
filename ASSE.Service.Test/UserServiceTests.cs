@@ -128,6 +128,7 @@ public class UserServiceTests
 	private static IEnumerable<object[]> UpdateUsers()
 	{
 		yield return new object[] { true, Times.Once(), GetValidUser() };
+		yield return new object[] { false, Times.Never(), new User() { Id = 1 } };
 		yield return new object[] { false, Times.Never(), new User() };
 	}
 

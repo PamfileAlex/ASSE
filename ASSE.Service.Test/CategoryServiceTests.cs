@@ -127,6 +127,7 @@ public class CategoryServiceTests
 	private static IEnumerable<object[]> UpdateCategories()
 	{
 		yield return new object[] { true, Times.Once(), GetValidCategory() };
+		yield return new object[] { false, Times.Never(), new Category() { Id = 1 } };
 		yield return new object[] { false, Times.Never(), new Category() };
 	}
 

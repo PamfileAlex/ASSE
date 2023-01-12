@@ -126,6 +126,7 @@ public class RoleServiceTests
 	private static IEnumerable<object[]> UpdateRoles()
 	{
 		yield return new object[] { true, Times.Once(), GetValidRole() };
+		yield return new object[] { false, Times.Never(), new Role() { Id = 1 } };
 		yield return new object[] { false, Times.Never(), new Role() };
 	}
 
