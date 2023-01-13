@@ -3,6 +3,7 @@ using ASSE.DomainModel.Models;
 using ASSE.DomainModel.Validators;
 using ASSE.Service.Implementations;
 using ASSE.TestCore;
+using ASSE.TestCore.xUnit;
 using FluentAssertions;
 using FluentValidation;
 using Moq;
@@ -108,7 +109,7 @@ public class RoleServiceTests
 		yield return new object[] { 20, null };
 	}
 
-	[Theory]
+	[ComplexTheory]
 	[MemberData(nameof(GetRoleById))]
 	public void GetById_ProvidedId_ReturnsExpected(int id, Role? data)
 	{
@@ -130,7 +131,7 @@ public class RoleServiceTests
 		yield return new object[] { false, Times.Never(), new Role() };
 	}
 
-	[Theory]
+	[ComplexTheory]
 	[MemberData(nameof(UpdateRoles))]
 	public void Update_ProvidedRole_ReturnsProvided(bool status, Times times, Role data)
 	{
@@ -171,7 +172,7 @@ public class RoleServiceTests
 		};
 	}
 
-	[Theory]
+	[ComplexTheory]
 	[MemberData(nameof(GetAll))]
 	public void GetAll_ProvidedInput_ReturnsProvided(List<Role> data)
 	{

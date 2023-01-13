@@ -3,6 +3,7 @@ using ASSE.DomainModel.Models;
 using ASSE.DomainModel.Validators;
 using ASSE.Service.Implementations;
 using ASSE.TestCore;
+using ASSE.TestCore.xUnit;
 using FluentAssertions;
 using FluentValidation;
 using Moq;
@@ -109,7 +110,7 @@ public class ProductServiceTests
 		yield return new object[] { 20, null };
 	}
 
-	[Theory]
+	[ComplexTheory]
 	[MemberData(nameof(GetProductById))]
 	public void GetById_ProvidedId_ReturnsExpected(int id, Product? data)
 	{
@@ -131,7 +132,7 @@ public class ProductServiceTests
 		yield return new object[] { false, Times.Never(), new Product() };
 	}
 
-	[Theory]
+	[ComplexTheory]
 	[MemberData(nameof(UpdateProducts))]
 	public void Update_ProvidedProduct_ReturnsProvided(bool status, Times times, Product data)
 	{
@@ -172,7 +173,7 @@ public class ProductServiceTests
 		};
 	}
 
-	[Theory]
+	[ComplexTheory]
 	[MemberData(nameof(GetAll))]
 	public void GetAll_ProvidedInput_ReturnsProvided(List<Product> data)
 	{

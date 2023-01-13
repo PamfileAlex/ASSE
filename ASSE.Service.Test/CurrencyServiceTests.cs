@@ -3,6 +3,7 @@ using ASSE.DomainModel.Models;
 using ASSE.DomainModel.Validators;
 using ASSE.Service.Implementations;
 using ASSE.TestCore;
+using ASSE.TestCore.xUnit;
 using FluentAssertions;
 using FluentValidation;
 using Moq;
@@ -108,7 +109,7 @@ public class CurrencyServiceTests
 		yield return new object[] { 20, null };
 	}
 
-	[Theory]
+	[ComplexTheory]
 	[MemberData(nameof(GetCurrencyById))]
 	public void GetById_ProvidedId_ReturnsExpected(int id, Currency? data)
 	{
@@ -130,7 +131,7 @@ public class CurrencyServiceTests
 		yield return new object[] { false, Times.Never(), new Currency() };
 	}
 
-	[Theory]
+	[ComplexTheory]
 	[MemberData(nameof(UpdateCurrencies))]
 	public void Update_ProvidedCurrency_ReturnsProvided(bool status, Times times, Currency data)
 	{
@@ -171,7 +172,7 @@ public class CurrencyServiceTests
 		};
 	}
 
-	[Theory]
+	[ComplexTheory]
 	[MemberData(nameof(GetAll))]
 	public void GetAll_ProvidedInput_ReturnsProvided(List<Currency> data)
 	{

@@ -4,6 +4,7 @@ using ASSE.DomainModel.Models;
 using ASSE.DomainModel.Validators;
 using ASSE.Service.Implementations;
 using ASSE.TestCore;
+using ASSE.TestCore.xUnit;
 using FluentAssertions;
 using FluentValidation;
 using Moq;
@@ -124,7 +125,7 @@ public class AuctionServiceTests
 		yield return new object[] { 20, null };
 	}
 
-	[Theory]
+	[ComplexTheory]
 	[MemberData(nameof(GetAuctionById))]
 	public void GetById_ProvidedId_ReturnsExpected(int id, Auction? data)
 	{
@@ -146,7 +147,7 @@ public class AuctionServiceTests
 		yield return new object[] { false, Times.Never(), new Auction() };
 	}
 
-	[Theory]
+	[ComplexTheory]
 	[MemberData(nameof(UpdateAuctions))]
 	public void Update_ProvidedAuction_ReturnsProvided(bool status, Times times, Auction data)
 	{
@@ -187,7 +188,7 @@ public class AuctionServiceTests
 		};
 	}
 
-	[Theory]
+	[ComplexTheory]
 	[MemberData(nameof(GetAll))]
 	public void GetAll_ProvidedInput_ReturnsProvided(List<Auction> data)
 	{

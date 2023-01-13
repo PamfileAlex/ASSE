@@ -1,9 +1,9 @@
-﻿using System.Data;
-using ASSE.DataMapper.Interfaces;
+﻿using ASSE.DataMapper.Interfaces;
 using ASSE.DomainModel.Models;
 using ASSE.DomainModel.Validators;
 using ASSE.Service.Implementations;
 using ASSE.TestCore;
+using ASSE.TestCore.xUnit;
 using FluentAssertions;
 using FluentValidation;
 using Moq;
@@ -109,7 +109,7 @@ public class CategoryServiceTests
 		yield return new object[] { 8, null };
 	}
 
-	[Theory]
+	[ComplexTheory]
 	[MemberData(nameof(GetCategoryById))]
 	public void GetById_ProvidedId_ReturnsExpected(int id, Category? data)
 	{
@@ -131,7 +131,7 @@ public class CategoryServiceTests
 		yield return new object[] { false, Times.Never(), new Category() };
 	}
 
-	[Theory]
+	[ComplexTheory]
 	[MemberData(nameof(UpdateCategories))]
 	public void Update_ProvidedCategory_ReturnsProvided(bool status, Times times, Category data)
 	{
@@ -172,7 +172,7 @@ public class CategoryServiceTests
 		};
 	}
 
-	[Theory]
+	[ComplexTheory]
 	[MemberData(nameof(GetAll))]
 	public void GetAll_ProvidedInput_ReturnsProvided(List<Category> data)
 	{
