@@ -22,7 +22,7 @@ using NullMessageSink = Xunit.Sdk.NullMessageSink;
 using TestMethodDisplay = Xunit.Sdk.TestMethodDisplay;
 using TestMethodDisplayOptions = Xunit.Sdk.TestMethodDisplayOptions;
 
-namespace ASSE.TestCore.xUnit
+namespace ASSE.Core.Test.xUnit
 {
 	public class ComplexDataRowTestCase : TestMethodTestCase, IXunitTestCase
 	{

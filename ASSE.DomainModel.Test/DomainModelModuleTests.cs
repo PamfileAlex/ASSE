@@ -4,7 +4,7 @@ using Autofac.Builder;
 using FluentAssertions;
 using FluentAssertions.Autofac;
 
-namespace ASSE.DomainModel.Test;
+namespace ASSE.DomainModel.Tests;
 public class DomainModelModuleTests
 {
 	private readonly IContainer _container;

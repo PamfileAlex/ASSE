@@ -17,7 +17,7 @@
 using Xunit.Abstractions;
 using Xunit.Sdk;
 
-namespace ASSE.TestCore.xUnit
+namespace ASSE.Core.Test.xUnit
 {
 	public class ComplexTheoryDiscoverer : IXunitTestCaseDiscoverer
 	{

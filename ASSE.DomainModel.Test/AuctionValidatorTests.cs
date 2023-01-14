@@ -4,7 +4,7 @@ using ASSE.DomainModel.Validators;
 using FluentValidation.TestHelper;
 using Moq;
 
-namespace ASSE.DomainModel.Test;
+namespace ASSE.DomainModel.Tests;
 public class AuctionValidatorTests
 {
 	private readonly AuctionValidator _validator;

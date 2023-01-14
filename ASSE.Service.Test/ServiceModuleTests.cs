@@ -4,7 +4,7 @@ using FluentAssertions;
 using FluentAssertions.Autofac;
 using ASSE.Service.Implementations;
 
-namespace ASSE.Service.Test;
+namespace ASSE.Service.Tests;
 
 public class ServiceModuleTests
 {

@@ -2,13 +2,13 @@
 using ASSE.DomainModel.Models;
 using ASSE.DomainModel.Validators;
 using ASSE.Service.Implementations;
-using ASSE.TestCore;
-using ASSE.TestCore.xUnit;
+using ASSE.Core.Test;
+using ASSE.Core.Test.xUnit;
 using FluentAssertions;
 using FluentValidation;
 using Moq;
 
-namespace ASSE.Service.Test;
+namespace ASSE.Service.Tests;
 public class ProductServiceTests
 {
 	private readonly IValidator<Product> _validator;

@@ -2,7 +2,7 @@
 using FluentValidation;
 using FluentValidation.Results;
 
-namespace ASSE.TestCore;
+namespace ASSE.Core.Test;
 public static class ValidationUtils
 {
 	private static List<ValidationFailure> _errors = new() { new ValidationFailure() };

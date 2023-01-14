@@ -22,8 +22,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ASSE.DomainModel\ASSE.DomainModel.csproj" />
-    <ProjectReference Include="..\ASSE.TestCore\ASSE.TestCore.csproj" />
+    <ProjectReference Include="..\ASSE.Service\ASSE.Service.csproj" />
+    <ProjectReference Include="..\ASSE.TestCore\ASSE.Core.Test.csproj" />
   </ItemGroup>
 
 </Project>

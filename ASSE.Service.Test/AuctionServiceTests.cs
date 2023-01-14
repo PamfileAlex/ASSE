@@ -3,13 +3,13 @@ using ASSE.DataMapper.Interfaces;
 using ASSE.DomainModel.Models;
 using ASSE.DomainModel.Validators;
 using ASSE.Service.Implementations;
-using ASSE.TestCore;
-using ASSE.TestCore.xUnit;
+using ASSE.Core.Test.xUnit;
 using FluentAssertions;
 using FluentValidation;
 using Moq;
+using ASSE.Core.Test;
 
-namespace ASSE.Service.Test;
+namespace ASSE.Service.Tests;
 public class AuctionServiceTests
 {
 	private readonly IValidator<Auction> _validator;

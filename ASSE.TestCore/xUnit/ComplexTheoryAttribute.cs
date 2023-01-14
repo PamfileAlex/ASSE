@@ -16,7 +16,7 @@
 
 using Xunit.Sdk;
 
-namespace ASSE.TestCore.xUnit
+namespace ASSE.Core.Test.xUnit
 {
 	[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
 	[XunitTestCaseDiscoverer("ASSE.TestCore.xUnit.ComplexTheoryDiscoverer", "ASSE.TestCore")]
