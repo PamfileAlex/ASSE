@@ -1,4 +1,5 @@
-﻿using ASSE.DataMapper.Interfaces;
+﻿using ASSE.Core.Utils;
+using ASSE.DataMapper.Interfaces;
 using ASSE.DomainModel.Models;
 using ASSE.Service.Interfaces;
 using FluentValidation;
@@ -16,6 +17,26 @@ public class AuctionService : EntityService<Auction, IAuctionDataAccess>, IAucti
 		return _dataAccess.GetAllActive();
 	}
 
+
+	public List<Auction> GetAllActiveByOwnerId(int ownerId)
+	{
+		return _dataAccess.GetAllActiveByOwnerId(ownerId);
+	}
+
+	protected override bool ValidateAdd(Auction auction)
+	{
+		if (!base.ValidateAdd(auction))
+		{
+			return false;
+		}
+
+		if (!ValidateLevenshteinDistance(auction))
+		{
+			return false;
+		}
+		return true;
+	}
+
 	protected override bool ValidateUpdate(Auction auction)
 	{
 		if (!base.ValidateUpdate(auction))
@@ -29,7 +50,7 @@ public class AuctionService : EntityService<Auction, IAuctionDataAccess>, IAucti
 		return true;
 	}
 
-	private bool ValidatePrice(Auction auction)
+	public bool ValidatePrice(Auction auction)
 	{
 		if (auction.BuyerId is null && auction.CurrentPrice is null)
 		{
@@ -57,6 +78,23 @@ public class AuctionService : EntityService<Auction, IAuctionDataAccess>, IAucti
 		if (auction.CurrentPrice > previousAuction.CurrentPrice * 4)
 		{
 			return false;
+		}
+		return true;
+	}
+
+	public bool ValidateLevenshteinDistance(Auction auction)
+	{
+		var auctions = GetAllActiveByOwnerId(auction.OwnerId);
+		if (auctions is null)
+		{
+			return true;
+		}
+		foreach (var item in auctions)
+		{
+			if (!LevenshteinDistance.AreDifferent(auction.Description, item.Description))
+			{
+				return false;
+			}
 		}
 		return true;
 	}

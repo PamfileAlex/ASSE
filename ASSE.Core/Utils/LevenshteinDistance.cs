@@ -3,6 +3,8 @@
 namespace ASSE.Core.Utils;
 public static class LevenshteinDistance
 {
+	public const int AcceptedDistance = 6;
+
 	public static int Calculate(string first, string second)
 	{
 		if (string.IsNullOrEmpty(first))
@@ -37,5 +39,10 @@ public static class LevenshteinDistance
 	{
 		//return new string(input.Where(c => !char.IsPunctuation(c)).ToArray()).ToLower();
 		return Regex.Replace(input, "[^a-zA-Z0-9]", "", RegexOptions.Compiled).ToLower();
+	}
+
+	public static bool AreDifferent(string first, string second)
+	{
+		return CalculateNormalized(first, second) > AcceptedDistance;
 	}
 }

@@ -8,6 +8,8 @@ using FluentAssertions;
 using FluentValidation;
 using Moq;
 using ASSE.Core.Test;
+using System;
+using static System.Collections.Specialized.BitVector32;
 
 namespace ASSE.Service.Tests;
 public class AuctionServiceTests
@@ -272,5 +274,73 @@ public class AuctionServiceTests
 
 		result.Should().BeEquivalentTo(data);
 		_mockDataAccess.Verify(x => x.GetAll());
+	}
+
+	[ComplexTheory]
+	[MemberData(nameof(GetAll))]
+	public void GetAllActive_ProvidedInput_ReturnsProvided(List<Auction> data)
+	{
+		_mockDataAccess.Setup(x => x.GetAllActive())
+			.Returns(data);
+
+		var service = new AuctionService(_mockDataAccess.Object, _validator);
+
+		var result = service.GetAllActive();
+
+		result.Should().BeEquivalentTo(data);
+		_mockDataAccess.Verify(x => x.GetAllActive());
+	}
+
+	[ComplexTheory]
+	[MemberData(nameof(GetAll))]
+	public void GetAllActiveByOwnerId_ProvidedInput_ReturnsProvided(List<Auction> data)
+	{
+		_mockDataAccess.Setup(x => x.GetAllActiveByOwnerId(It.IsAny<int>()))
+			.Returns(data);
+
+		var service = new AuctionService(_mockDataAccess.Object, _validator);
+
+		var result = service.GetAllActiveByOwnerId(1);
+
+		result.Should().BeEquivalentTo(data);
+		_mockDataAccess.Verify(x => x.GetAllActiveByOwnerId(It.IsAny<int>()));
+	}
+
+	private static IEnumerable<object[]> ValidateLevenshteinDistanceData()
+	{
+		yield return new object[] { true, GetValidAuction(), new List<Auction>() };
+		yield return new object[] { false, GetValidAuction(), new List<Auction>() { GetValidAuction() } };
+	}
+
+	[ComplexTheory]
+	[MemberData(nameof(ValidateLevenshteinDistanceData))]
+	public void ValidateLevenshteinDistance(bool status, Auction auction, List<Auction> auctions)
+	{
+		_mockDataAccess.Setup(x => x.GetAllActiveByOwnerId(auction.OwnerId))
+			.Returns(auctions);
+
+		var service = new AuctionService(_mockDataAccess.Object, _validator);
+
+		var result = service.ValidateLevenshteinDistance(auction);
+
+		result.Should().Be(status);
+		_mockDataAccess.Verify(x => x.GetAllActiveByOwnerId(auction.OwnerId));
+	}
+
+	[Fact]
+	public void Add_ValidAuction_FailsLevenshteinDistance()
+	{
+		var data = GetValidAuction();
+
+		_mockDataAccess.Setup(x => x.GetAllActiveByOwnerId(data.OwnerId))
+			.Returns(new List<Auction>() { GetValidAuction() });
+
+		var service = new AuctionService(_mockDataAccess.Object, _validator);
+
+		var result = service.Add(data);
+
+		result.Should().Be(default);
+		_mockDataAccess.Verify(x => x.GetAllActiveByOwnerId(data.OwnerId));
+		_mockDataAccess.Verify(x => x.Add(data), Times.Never());
 	}
 }

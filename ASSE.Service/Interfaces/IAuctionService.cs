@@ -4,4 +4,5 @@ namespace ASSE.Service.Interfaces;
 public interface IAuctionService : IEntityService<Auction>
 {
 	List<Auction> GetAllActive();
+	List<Auction> GetAllActiveByOwnerId(int ownerId);
 }
