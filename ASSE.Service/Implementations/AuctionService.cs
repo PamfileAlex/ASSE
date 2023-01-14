@@ -15,4 +15,49 @@ public class AuctionService : EntityService<Auction, IAuctionDataAccess>, IAucti
 	{
 		return _dataAccess.GetAllActive();
 	}
+
+	protected override bool ValidateUpdate(Auction auction)
+	{
+		if (!base.ValidateUpdate(auction))
+		{
+			return false;
+		}
+		if (!ValidatePrice(auction))
+		{
+			return false;
+		}
+		return true;
+	}
+
+	private bool ValidatePrice(Auction auction)
+	{
+		if (auction.BuyerId is null && auction.CurrentPrice is null)
+		{
+			return true;
+		}
+
+		if (auction.BuyerId is null)
+		{
+			return false;
+		}
+		if (auction.CurrentPrice is null)
+		{
+			return false;
+		}
+
+		Auction? previousAuction = Get(auction.Id);
+		if (previousAuction is null)
+		{
+			return false;
+		}
+		if (auction.CurrentPrice <= previousAuction.CurrentPrice)
+		{
+			return false;
+		}
+		if (auction.CurrentPrice > previousAuction.CurrentPrice * 4)
+		{
+			return false;
+		}
+		return true;
+	}
 }

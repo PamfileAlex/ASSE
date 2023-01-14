@@ -39,10 +39,18 @@ public class AuctionServiceTests
 			Description = "Description",
 			StartDate = new DateTime(2023, 1, 1),
 			EndDate = new DateTime(2023, 1, 2),
-			StartingPrice = 100,
-			//CurrentPrice = 150,
+			StartingPrice = 10,
+			//CurrentPrice = 15,
 			IsActive = true
 		};
+	}
+
+	public static Auction GetValidUpdateAuction(int? buyerId = 2, double? currentPrice = 15.0)
+	{
+		var auction = GetValidAuction();
+		auction.BuyerId = buyerId;
+		auction.CurrentPrice = currentPrice;
+		return auction;
 	}
 
 	[Fact]
@@ -160,6 +168,69 @@ public class AuctionServiceTests
 
 		result.Should().Be(status);
 		_mockDataAccess.Verify(x => x.Update(data), times);
+	}
+
+	[Fact]
+	public void Update_ValidatePrice_ValidAuction()
+	{
+		var data = GetValidUpdateAuction();
+
+		_mockDataAccess.Setup(x => x.Update(data))
+			.Returns(true);
+		_mockDataAccess.Setup(x => x.Get(data.Id))
+			.Returns(GetValidAuction());
+
+		var service = new AuctionService(_mockDataAccess.Object, _validator);
+
+		var result = service.Update(data);
+
+		result.Should().Be(true);
+		_mockDataAccess.Verify(x => x.Update(data));
+		_mockDataAccess.Verify(x => x.Get(data.Id));
+	}
+
+	[Fact]
+	public void Update_ValidatePrice_EarlyExit()
+	{
+		var data = GetValidAuction();
+
+		_mockDataAccess.Setup(x => x.Update(data))
+			.Returns(true);
+
+		var service = new AuctionService(_mockDataAccess.Object, _validator);
+
+		var result = service.Update(data);
+
+		result.Should().Be(true);
+		_mockDataAccess.Verify(x => x.Update(data));
+		_mockDataAccess.Verify(x => x.Get(data.Id), Times.Never());
+	}
+
+	private static IEnumerable<object[]> Update_ValidatePrice_InvalidAuctions()
+	{
+		yield return new object[] { GetValidUpdateAuction(), null, Times.Once() };
+		yield return new object[] { GetValidUpdateAuction(buyerId: null), null, Times.Never() };
+		yield return new object[] { GetValidUpdateAuction(currentPrice: null), null, Times.Never() };
+		yield return new object[] { GetValidUpdateAuction(), new Auction() { CurrentPrice = 15.0 }, Times.Once() };
+		yield return new object[] { GetValidUpdateAuction(), new Auction() { CurrentPrice = 1.0 }, Times.Once() };
+	}
+
+	[ComplexTheory]
+	[MemberData(nameof(Update_ValidatePrice_InvalidAuctions))]
+	public void Update_ValidatePrice_Invalid(Auction data, Auction previous, Times getTimes)
+	{
+		_mockDataAccess.Setup(x => x.Update(data))
+			.Returns(true);
+		_mockDataAccess.Setup(x => x.Get(data.Id))
+			.Returns(previous);
+
+		var service = new AuctionService(_mockDataAccess.Object, _validator);
+
+		var result = service.Update(data);
+
+		result.Should().Be(false);
+		_mockDataAccess.Verify(x => x.Update(data), Times.Never());
+		_mockDataAccess.Verify(x => x.Get(data.Id), getTimes);
 	}
 
 	[Theory]
