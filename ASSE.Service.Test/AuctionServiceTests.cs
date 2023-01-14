@@ -35,12 +35,12 @@ public class AuctionServiceTests
 			OwnerId = 1,
 			ProductId = 1,
 			CurrencyId = 1,
-			BuyerId = 1,
+			//BuyerId = 1,
 			Description = "Description",
 			StartDate = new DateTime(2023, 1, 1),
 			EndDate = new DateTime(2023, 1, 2),
 			StartingPrice = 100,
-			CurrentPrice = 150,
+			//CurrentPrice = 150,
 			IsActive = true
 		};
 	}

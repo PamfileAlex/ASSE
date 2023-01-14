@@ -179,4 +179,21 @@ public class AuctionValidatorTests
 
 		result.ShouldHaveValidationErrorFor(auction => auction.StartingPrice);
 	}
+
+	[Theory]
+	[InlineData(0.0)]
+	[InlineData(-1.0)]
+	[InlineData(500.0)]
+	public void Validate_InvalidCurrentPrice_Fails(double currentPrice)
+	{
+		var auction = new Auction()
+		{
+			StartingPrice = 500,
+			CurrentPrice = currentPrice,
+		};
+
+		var result = _validator.TestValidate(auction);
+
+		result.ShouldHaveValidationErrorFor(auction => auction.CurrentPrice);
+	}
 }
