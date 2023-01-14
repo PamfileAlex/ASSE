@@ -17,17 +17,35 @@ public static class LevenshteinDistance
 			return first is not null ? first.Length : default;
 		}
 
-		var tailFirst = first[1..];
-		var tailSecond = second[1..];
+		//var tailFirst = first[1..];
+		//var tailSecond = second[1..];
 
-		if (first[0] == second[0])
+		//if (first[0] == second[0])
+		//{
+		//	return Calculate(tailFirst, tailSecond);
+		//}
+
+		//return 1 + MoreMath.Min(Calculate(tailFirst, second),
+		//						Calculate(first, tailSecond),
+		//						Calculate(tailFirst, tailSecond));
+
+		int[,] matrix = new int[first.Length + 1, second.Length + 1];
+
+		for (var row = 0; row <= first.Length; matrix[row, 0] = row++) { }
+		for (var column = 0; column <= second.Length; matrix[0, column] = column++) { }
+
+		for (var row = 1; row <= first.Length; row++)
 		{
-			return Calculate(tailFirst, tailSecond);
-		}
+			for (var column = 1; column <= second.Length; column++)
+			{
+				var cost = (first[row - 1] == second[column - 1]) ? 0 : 1;
 
-		return 1 + MoreMath.Min(Calculate(tailFirst, second),
-								Calculate(first, tailSecond),
-								Calculate(tailFirst, tailSecond));
+				matrix[row, column] = MoreMath.Min(matrix[row - 1, column] + 1,
+													matrix[row, column - 1] + 1,
+													matrix[row - 1, column - 1] + cost);
+			}
+		}
+		return matrix[first.Length, second.Length];
 	}
 
 	public static int CalculateNormalized(string first, string second)
