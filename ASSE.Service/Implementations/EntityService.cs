@@ -28,11 +28,16 @@ public abstract class EntityService<T, D> : GenericService<D>, IEntityService<T>
 
 	public virtual int Add(T data)
 	{
-		if (_validator.Validate(data).IsValid)
+		if (!ValidateAdd(data))
 		{
-			return _dataAccess.Add(data);
+			return default;
 		}
-		return default;
+		return _dataAccess.Add(data);
+	}
+
+	protected virtual bool ValidateAdd(T data)
+	{
+		return _validator.Validate(data).IsValid;
 	}
 
 	public virtual T? Get(int id)
@@ -42,15 +47,20 @@ public abstract class EntityService<T, D> : GenericService<D>, IEntityService<T>
 
 	public virtual bool Update(T data)
 	{
+		if (!ValidateUpdate(data))
+		{
+			return false;
+		}
+		return _dataAccess.Update(data);
+	}
+
+	protected virtual bool ValidateUpdate(T data)
+	{
 		if (data.Id <= 0)
 		{
 			return false;
 		}
-		if (_validator.Validate(data).IsValid)
-		{
-			return _dataAccess.Update(data);
-		}
-		return false;
+		return _validator.Validate(data).IsValid;
 	}
 
 	public virtual bool Delete(int id)
