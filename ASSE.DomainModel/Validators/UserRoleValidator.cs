@@ -6,7 +6,7 @@ public class UserRoleValidator : AbstractValidator<UserRole>
 {
 	public UserRoleValidator()
 	{
-		RuleFor(x => x.UserId).NotEmpty();
-		RuleFor(x => x.RoleId).NotEmpty();
+		RuleFor(x => x.UserId).NotEmpty().GreaterThan(0);
+		RuleFor(x => x.RoleId).NotEmpty().GreaterThan(0);
 	}
 }

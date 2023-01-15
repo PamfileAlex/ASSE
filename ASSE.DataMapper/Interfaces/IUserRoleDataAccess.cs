@@ -2,7 +2,7 @@
 using ASSE.DomainModel.Models;
 
 namespace ASSE.DataMapper.Interfaces;
-internal interface IUserRoleDataAccess : IPairTableRelationDataAccess<UserRole>
+public interface IUserRoleDataAccess : IPairTableRelationDataAccess<UserRole>
 {
 	new void Add(int userId, int roleId);
 	new void Add(int userId, int roleId, IDbConnection connection, IDbTransaction? transaction = null);

@@ -6,7 +6,7 @@ using ASSE.DomainModel.Models;
 using Dapper;
 
 namespace ASSE.DataMapper.Implementations;
-internal class UserRoleDataAccess : PairTableRelationDataAccess<UserRole>, IUserRoleDataAccess
+public class UserRoleDataAccess : PairTableRelationDataAccess<UserRole>, IUserRoleDataAccess
 {
 	protected readonly IUserDataAccess _userDataAccess;
 	protected readonly IRoleDataAccess _roleDataAccess;
