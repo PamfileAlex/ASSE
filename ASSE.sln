@@ -19,7 +19,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASSE.Service.Tests", "ASSE.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASSE.Core.Test", "ASSE.TestCore\ASSE.Core.Test.csproj", "{A5439C55-77E1-4AA7-9CEF-01408451577A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASSE.Core.Tests", "ASSE.Core.Tests\ASSE.Core.Tests.csproj", "{A75E4B4B-3DAC-4476-A8B7-FFBB5C62B288}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASSE.Core.Tests", "ASSE.Core.Tests\ASSE.Core.Tests.csproj", "{A75E4B4B-3DAC-4476-A8B7-FFBB5C62B288}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D3789AA3-854A-46B1-9D85-F88C8B794E9A}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		stylecop.json = stylecop.json
+		StyleCopAnalyzers.ruleset = StyleCopAnalyzers.ruleset
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
