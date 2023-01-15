@@ -4,6 +4,7 @@ using ASSE.DataMapper.Interfaces;
 using ASSE.DataMapper.Services;
 using ASSE.DomainModel.Models;
 using Dapper;
+using Serilog;
 
 namespace ASSE.DataMapper.Implementations;
 public class UserRoleDataAccess : PairTableRelationDataAccess<UserRole>, IUserRoleDataAccess
@@ -11,8 +12,8 @@ public class UserRoleDataAccess : PairTableRelationDataAccess<UserRole>, IUserRo
 	protected readonly IUserDataAccess _userDataAccess;
 	protected readonly IRoleDataAccess _roleDataAccess;
 	public UserRoleDataAccess(IDbConnectionProvider dbConnectionProvider,
-		IUserDataAccess userDataAccess, IRoleDataAccess roleDataAccess)
-		: base(dbConnectionProvider)
+		IUserDataAccess userDataAccess, IRoleDataAccess roleDataAccess, ILogger logger)
+		: base(dbConnectionProvider, logger)
 	{
 		_userDataAccess = userDataAccess;
 		_roleDataAccess = roleDataAccess;
@@ -25,10 +26,11 @@ public class UserRoleDataAccess : PairTableRelationDataAccess<UserRole>, IUserRo
 
 	public override void Add(int userId, int roleId, IDbConnection connection, IDbTransaction? transaction = null)
 	{
+		_logger.Debug("Adding: ({userId}, {roleId})", userId, roleId);
+
 		string sql = @"INSERT INTO User_Role
 						(UserId, RoleId)
-						VALUES (@userId, @roleId)"
-		;
+						VALUES (@userId, @roleId)";
 
 		connection.Execute(sql, new { userId, roleId }, transaction);
 	}
@@ -40,6 +42,8 @@ public class UserRoleDataAccess : PairTableRelationDataAccess<UserRole>, IUserRo
 
 	public override bool Delete(int userId, int roleId, IDbConnection connection, IDbTransaction? transaction = null)
 	{
+		_logger.Debug("Deleting: ({userId}, {roleId})", userId, roleId);
+
 		string sql = @"DELETE FROM User_Role
 							WHERE UserId=@userId
 							AND RoleId=@roleId";
@@ -49,6 +53,8 @@ public class UserRoleDataAccess : PairTableRelationDataAccess<UserRole>, IUserRo
 
 	public override List<UserRole> GetAll(IDbConnection connection, IDbTransaction? transaction = null)
 	{
+		_logger.Debug("Getting all");
+
 		string sql = @"SELECT * FROM User_Role";
 
 		return connection.Query(sql)
@@ -66,6 +72,8 @@ public class UserRoleDataAccess : PairTableRelationDataAccess<UserRole>, IUserRo
 
 	public List<User> GetAllUsersByRoleId(int roleId, IDbConnection connection, IDbTransaction? transaction = null)
 	{
+		_logger.Debug("Getting all users by roleId: {roleId}", roleId);
+
 		string sql = @"SELECT UserId FROM User_Role
 							WHERE RoleId=@id";
 
@@ -81,6 +89,8 @@ public class UserRoleDataAccess : PairTableRelationDataAccess<UserRole>, IUserRo
 
 	public List<Role> GetAllRolesByUserId(int userId, IDbConnection connection, IDbTransaction? transaction = null)
 	{
+		_logger.Debug("Getting all roles by userId: {userId}", userId);
+
 		string sql = @"SELECT RoleId FROM User_Role
 							WHERE UserId=@id";
 
