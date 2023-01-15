@@ -1,4 +1,5 @@
-﻿using ASSE.Core.Utils;
+﻿using ASSE.Core.Services;
+using ASSE.Core.Utils;
 using ASSE.DataMapper.Interfaces;
 using ASSE.DomainModel.Models;
 using ASSE.Service.Interfaces;
@@ -7,9 +8,11 @@ using FluentValidation;
 namespace ASSE.Service.Implementations;
 public class AuctionService : EntityService<Auction, IAuctionDataAccess>, IAuctionService
 {
-	public AuctionService(IAuctionDataAccess dataAccess, IValidator<Auction> validator)
+	private readonly IConfigProvider _configProvider;
+	public AuctionService(IAuctionDataAccess dataAccess, IValidator<Auction> validator, IConfigProvider configProvider)
 		: base(dataAccess, validator)
 	{
+		_configProvider = configProvider;
 	}
 
 	public List<Auction> GetAllActive()
@@ -29,8 +32,11 @@ public class AuctionService : EntityService<Auction, IAuctionDataAccess>, IAucti
 		{
 			return false;
 		}
-
 		if (!ValidateLevenshteinDistance(auction))
+		{
+			return false;
+		}
+		if (!ValidateMaxAuctions(auction))
 		{
 			return false;
 		}
@@ -95,6 +101,17 @@ public class AuctionService : EntityService<Auction, IAuctionDataAccess>, IAucti
 			{
 				return false;
 			}
+		}
+		return true;
+	}
+
+	public bool ValidateMaxAuctions(Auction auction)
+	{
+		var auctions = GetAllActiveByOwnerId(auction.OwnerId);
+		var maxAuctions = _configProvider.MaxAuctions;
+		if (auctions.Count >= maxAuctions)
+		{
+			return false;
 		}
 		return true;
 	}
