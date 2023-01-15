@@ -107,10 +107,6 @@ public class AuctionService : EntityService<Auction, IAuctionDataAccess>, IAucti
 	{
 		Log.Debug("Validating Levenshtein distance for: {auction}", auction);
 		var auctions = GetAllActiveByOwnerId(auction.OwnerId);
-		if (auctions is null)
-		{
-			return true;
-		}
 		foreach (var item in auctions)
 		{
 			if (!LevenshteinDistance.AreDifferent(auction.Description, item.Description))
