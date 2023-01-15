@@ -16,6 +16,6 @@ public class CliModule : Module
 		builder.RegisterModule<DataMapperModule>();
 		builder.RegisterModule<ServiceModule>();
 
-		builder.RegisterType<SQLiteConnectionProvider>().As<IDbConnectionProvider>();
+		//builder.RegisterType<SQLiteConnectionProvider>().As<IDbConnectionProvider>();
 	}
 }

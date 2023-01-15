@@ -4,14 +4,15 @@ using ASSE.DataMapper.Interfaces;
 using ASSE.DataMapper.Services;
 using Dapper;
 using Dapper.Contrib.Extensions;
+using Serilog;
 
 namespace ASSE.DataMapper.Implementations;
 public abstract class DataAccess<T> : DataAccess, IDataAccess<T>
 	where T : class, IKeyEntity, new()
 {
 	#region Constructors
-	protected DataAccess(IDbConnectionProvider dbConnectionProvider)
-		: base(dbConnectionProvider)
+	protected DataAccess(IDbConnectionProvider dbConnectionProvider, ILogger logger)
+		: base(dbConnectionProvider, logger)
 	{
 	}
 	#endregion
@@ -26,6 +27,7 @@ public abstract class DataAccess<T> : DataAccess, IDataAccess<T>
 
 	public virtual int Add(T data, IDbConnection connection, IDbTransaction? transaction = null)
 	{
+		_logger.Debug("Adding: {data}", data);
 		data.Id = (int)connection.Insert(data, transaction);
 		return data.Id;
 	}
@@ -34,6 +36,7 @@ public abstract class DataAccess<T> : DataAccess, IDataAccess<T>
 	#region Get Methods
 	public virtual T? Get(int id)
 	{
+		_logger.Debug("Getting with id: {id}", id);
 		using IDbConnection connection = _dbConnectionProvider.GetNewConnection();
 		connection.Open();
 		return Get(id, connection);
@@ -55,6 +58,7 @@ public abstract class DataAccess<T> : DataAccess, IDataAccess<T>
 
 	public virtual bool Update(T data, IDbConnection connection, IDbTransaction? transaction = null)
 	{
+		_logger.Debug("Updating: {data}", data);
 		return connection.Update(data, transaction);
 	}
 	#endregion
@@ -69,6 +73,7 @@ public abstract class DataAccess<T> : DataAccess, IDataAccess<T>
 
 	public virtual bool Delete(int id, IDbConnection connection, IDbTransaction? transaction = null)
 	{
+		_logger.Debug("Deleting with id: {id}", id);
 		return connection.Delete(new T() { Id = id }, transaction);
 	}
 	#endregion
@@ -83,6 +88,7 @@ public abstract class DataAccess<T> : DataAccess, IDataAccess<T>
 
 	public virtual List<T> GetAll(IDbConnection connection, IDbTransaction? transaction = null)
 	{
+		_logger.Debug("Getting all entities");
 		return connection.GetAll<T>(transaction).AsList();
 	}
 	#endregion

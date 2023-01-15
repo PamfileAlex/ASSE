@@ -3,12 +3,13 @@ using ASSE.DataMapper.Interfaces;
 using ASSE.DataMapper.Services;
 using ASSE.DomainModel.Models;
 using Dapper;
+using Serilog;
 
 namespace ASSE.DataMapper.Implementations;
 public class AuctionDataAccess : DataAccess<Auction>, IAuctionDataAccess
 {
-	public AuctionDataAccess(IDbConnectionProvider dbConnectionProvider)
-		: base(dbConnectionProvider)
+	public AuctionDataAccess(IDbConnectionProvider dbConnectionProvider, ILogger logger)
+		: base(dbConnectionProvider, logger)
 	{
 	}
 
@@ -21,6 +22,8 @@ public class AuctionDataAccess : DataAccess<Auction>, IAuctionDataAccess
 
 	public List<Auction> GetAllActive(IDbConnection connection, IDbTransaction? transaction = null)
 	{
+		_logger.Debug("Getting all active");
+
 		string sql = @"SELECT * FROM Auctions
 							WHERE IsActive=TRUE";
 
@@ -36,6 +39,8 @@ public class AuctionDataAccess : DataAccess<Auction>, IAuctionDataAccess
 
 	public List<Auction> GetAllActiveByOwnerId(int ownerId, IDbConnection connection, IDbTransaction? transaction = null)
 	{
+		_logger.Debug("Getting all active by ownerId: {ownerId}", ownerId);
+
 		string sql = @"SELECT * FROM Auctions
 							WHERE IsActive=TRUE
 							AND OwnerId=@ownerId";

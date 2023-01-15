@@ -2,6 +2,7 @@
 using ASSE.DomainModel.Models;
 using ASSE.Service.Interfaces;
 using FluentValidation;
+using Serilog;
 
 namespace ASSE.Service.Implementations;
 public class UserRoleService : IUserRoleService
@@ -22,8 +23,10 @@ public class UserRoleService : IUserRoleService
 
 	public void Add(UserRole userRole)
 	{
+		Log.Debug("Adding: {userRole}", userRole);
 		if (!_validator.Validate(userRole).IsValid)
 		{
+			Log.Debug("Failed validator for: {userRole}", userRole);
 			throw new ApplicationException("Invalid data");
 		}
 		_dataAccess.Add(userRole.UserId, userRole.RoleId);
@@ -36,11 +39,14 @@ public class UserRoleService : IUserRoleService
 
 	public bool Delete(UserRole userRole)
 	{
+		Log.Debug("Deleting: {userRole}", userRole);
 		return _dataAccess.Delete(userRole.UserId, userRole.RoleId);
 	}
 
 	public List<UserRole> GetAll()
 	{
+		Log.Debug("Getting all");
+		Log.Debug("Getting all");
 		return _dataAccess.GetAll();
 	}
 }

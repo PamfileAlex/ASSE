@@ -10,9 +10,4 @@ public class UserService : EntityService<User, IUserDataAccess>, IUserService
 		: base(dataAccess, validator)
 	{
 	}
-
-	public void AddRole(Role role)
-	{
-		throw new NotImplementedException();
-	}
 }
