@@ -26,4 +26,20 @@ public class AuctionDataAccess : DataAccess<Auction>, IAuctionDataAccess
 
 		return connection.Query<Auction>(sql, transaction: transaction).AsList();
 	}
+
+	public List<Auction> GetAllActiveByOwnerId(int ownerId)
+	{
+		using IDbConnection connection = _dbConnectionProvider.GetNewConnection();
+		connection.Open();
+		return GetAllActiveByOwnerId(ownerId, connection);
+	}
+
+	public List<Auction> GetAllActiveByOwnerId(int ownerId, IDbConnection connection, IDbTransaction? transaction = null)
+	{
+		string sql = @"SELECT * FROM Auctions
+							WHERE IsActive=TRUE
+							AND OwnerId=@ownerId";
+
+		return connection.Query<Auction>(sql, new { ownerId }, transaction).AsList();
+	}
 }

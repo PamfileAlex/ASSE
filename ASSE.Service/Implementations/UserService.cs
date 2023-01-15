@@ -1,25 +1,18 @@
 ﻿using ASSE.DataMapper.Interfaces;
 using ASSE.DomainModel.Models;
-using ASSE.DomainModel.Validators;
 using ASSE.Service.Interfaces;
+using FluentValidation;
 
 namespace ASSE.Service.Implementations;
 public class UserService : EntityService<User, IUserDataAccess>, IUserService
 {
-	private readonly UserValidator _validator;
-
-	public UserService(IUserDataAccess dataAccess, UserValidator validator)
-		: base(dataAccess)
+	public UserService(IUserDataAccess dataAccess, IValidator<User> validator)
+		: base(dataAccess, validator)
 	{
-		_validator = validator;
 	}
 
-	public override int Add(User user)
+	public void AddRole(Role role)
 	{
-		if (!_validator.Validate(user).IsValid)
-		{
-			return default;
-		}
-		return base.Add(user);
+		throw new NotImplementedException();
 	}
 }

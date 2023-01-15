@@ -4,7 +4,7 @@ using FluentAssertions;
 using FluentAssertions.Autofac;
 using ASSE.Service.Implementations;
 
-namespace ASSE.Service.Test;
+namespace ASSE.Service.Tests;
 
 public class ServiceModuleTests
 {
@@ -26,5 +26,6 @@ public class ServiceModuleTests
 		_container.Should().Have().Registered<ProductService>().AsSelf().AsImplementedInterfaces();
 		_container.Should().Have().Registered<RoleService>().AsSelf().AsImplementedInterfaces();
 		_container.Should().Have().Registered<UserService>().AsSelf().AsImplementedInterfaces();
+		_container.Should().Have().Registered<UserRoleService>().AsSelf().AsImplementedInterfaces();
 	}
 }

@@ -2,7 +2,7 @@
 using ASSE.DomainModel.Validators;
 using FluentValidation.TestHelper;
 
-namespace ASSE.DomainModel.Test;
+namespace ASSE.DomainModel.Tests;
 public class CurrencyValidatorTests
 {
 	private readonly CurrencyValidator _validator;

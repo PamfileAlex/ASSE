@@ -25,6 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ASSE.Core\ASSE.Core.csproj" />
     <ProjectReference Include="..\ASSE.DomainModel\ASSE.DomainModel.csproj" />
   </ItemGroup>
 

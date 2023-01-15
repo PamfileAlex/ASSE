@@ -2,7 +2,7 @@
 using ASSE.DomainModel.Validators;
 using FluentValidation.TestHelper;
 
-namespace ASSE.DomainModel.Test;
+namespace ASSE.DomainModel.Tests;
 public class RoleValidatorTests
 {
 	private readonly RoleValidator _validator;

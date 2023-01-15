@@ -6,13 +6,23 @@ public class ConfigProvider : IConfigProvider
 {
 	private readonly ILogger _logger;
 
-	public string PostgresConnectionString => ConfigurationManager.ConnectionStrings["SQLiteConnection"].ConnectionString;
+	public string? PostgresConnectionString => GetConnectionString("PostgresConnection");
 	public int MaxAuctions => GetValue<int>("MaxAuctions");
 	public double InitialScore => GetValue<double>("InitialScore");
 
 	public ConfigProvider(ILogger logger)
 	{
 		_logger = logger;
+	}
+
+	public string? GetConnectionString(string key)
+	{
+		var conn = ConfigurationManager.ConnectionStrings[key];
+		if (conn is null)
+		{
+			return null;
+		}
+		return conn.ConnectionString;
 	}
 
 	public string? GetValue(string key)
