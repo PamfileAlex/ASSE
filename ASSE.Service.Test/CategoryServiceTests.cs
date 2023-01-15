@@ -102,11 +102,11 @@ public class CategoryServiceTests
 		_mockDataAccess.Verify(x => x.Add(data), Times.Never());
 	}
 
-	private static IEnumerable<object[]> GetCategoryById()
+	private static IEnumerable<object?[]> GetCategoryById()
 	{
-		yield return new object[] { 1, new Category() { Id = 1, Name = "Electronics" } };
-		yield return new object[] { 2, new Category() { Id = 2, Name = "Laptops", ParentId = 1 } };
-		yield return new object[] { 8, null };
+		yield return new object?[] { 1, new Category() { Id = 1, Name = "Electronics" } };
+		yield return new object?[] { 2, new Category() { Id = 2, Name = "Laptops", ParentId = 1 } };
+		yield return new object?[] { 8, null };
 	}
 
 	[ComplexTheory]

@@ -26,16 +26,16 @@ namespace ASSE.Core.Test.xUnit
 {
 	public class ComplexDataRowTestCase : TestMethodTestCase, IXunitTestCase
 	{
-		readonly IMessageSink _MessageSink;
-		int _AttributeNumber;
-		int _RowNumber;
-		int _Timeout;
+		private readonly IMessageSink _messageSink;
+		private int _attributeNumber;
+		private int _rowNumber;
+		readonly int _timeout;
 
 		[EditorBrowsable(EditorBrowsableState.Never)]
 		[Obsolete("Use for deserialization only.")]
 		public ComplexDataRowTestCase()
 		{
-			_MessageSink = new NullMessageSink();
+			_messageSink = new NullMessageSink();
 		}
 
 		public ComplexDataRowTestCase(
@@ -51,9 +51,9 @@ namespace ASSE.Core.Test.xUnit
 				  testMethod,
 				  GetTestMethodArguments(testMethod, attributeNumber, rowNumber, messageSink))
 		{
-			_AttributeNumber = attributeNumber;
-			_RowNumber = rowNumber;
-			_MessageSink = messageSink;
+			_attributeNumber = attributeNumber;
+			_rowNumber = rowNumber;
+			_messageSink = messageSink;
 		}
 
 		/// <summary>
@@ -89,13 +89,13 @@ namespace ASSE.Core.Test.xUnit
 
 				if (discovererAttribute != null)
 				{
-					var discoverer = ExtensibilityPointFactory.GetTraitDiscoverer(_MessageSink, discovererAttribute);
+					var discoverer = ExtensibilityPointFactory.GetTraitDiscoverer(_messageSink, discovererAttribute);
 					if (discoverer != null)
 						foreach (var keyValuePair in discoverer.GetTraits(traitAttribute))
 							Add(Traits, keyValuePair.Key, keyValuePair.Value);
 				}
 				else
-					_MessageSink.OnMessage(
+					_messageSink.OnMessage(
 						new DiagnosticMessage(
 							$"Trait attribute on '{DisplayName}' did not have [TraitDiscoverer]"));
 			}
@@ -116,14 +116,16 @@ namespace ASSE.Core.Test.xUnit
 				.Concat(testMethod.TestClass.Class.GetCustomAttributes(typeof(ITraitAttribute)));
 		}
 
-		static object[] GetTestMethodArguments(ITestMethod testMethod, int attributeNumber, int rowNumber, IMessageSink diagnosticMessageSink)
+		static object[]? GetTestMethodArguments(ITestMethod testMethod, int attributeNumber, int rowNumber, IMessageSink diagnosticMessageSink)
 		{
 			try
 			{
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
 				IAttributeInfo dataAttribute =
 					testMethod.Method.GetCustomAttributes(typeof(DataAttribute))
 					.Where((x, i) => i == attributeNumber)
 					.FirstOrDefault();
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
 
 				if (dataAttribute == null)
 					return null;
@@ -148,23 +150,23 @@ namespace ASSE.Core.Test.xUnit
 		public override void Serialize(IXunitSerializationInfo data)
 		{
 			data.AddValue("TestMethod", TestMethod);
-			data.AddValue("AttributeNumber", _AttributeNumber);
-			data.AddValue("RowNumber", _RowNumber);
+			data.AddValue("AttributeNumber", _attributeNumber);
+			data.AddValue("RowNumber", _rowNumber);
 		}
 
 		public override void Deserialize(IXunitSerializationInfo data)
 		{
 			TestMethod = data.GetValue<ITestMethod>("TestMethod");
-			_AttributeNumber = data.GetValue<int>("AttributeNumber");
-			_RowNumber = data.GetValue<int>("RowNumber");
-			TestMethodArguments = GetTestMethodArguments(TestMethod, _AttributeNumber, _RowNumber, _MessageSink);
+			_attributeNumber = data.GetValue<int>("AttributeNumber");
+			_rowNumber = data.GetValue<int>("RowNumber");
+			TestMethodArguments = GetTestMethodArguments(TestMethod, _attributeNumber, _rowNumber, _messageSink);
 		}
 
 		protected override string GetUniqueID()
 		{
 			return
 				$"{TestMethod.TestClass.Class.Name}:" +
-				$"{TestMethod.Method.Name};{_AttributeNumber}/{_RowNumber}:" +
+				$"{TestMethod.Method.Name};{_attributeNumber}/{_rowNumber}:" +
 				$"{TestMethod.TestClass.TestCollection.TestAssembly.Assembly.Name};";
 		}
 

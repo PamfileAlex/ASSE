@@ -121,7 +121,6 @@ public class AuctionValidatorTests
 
 	private static IEnumerable<object[]> GetInvalidStartDateTimes()
 	{
-		//yield return new object[] { null };
 		yield return new object[] { default(DateTime) };
 		yield return new object[] { new DateTime(2020, 10, 1) };
 	}
@@ -143,7 +142,6 @@ public class AuctionValidatorTests
 
 	private static IEnumerable<object[]> GetInvalidEndDateTimes()
 	{
-		//yield return new object[] { null };
 		yield return new object[] { default(DateTime) };
 		yield return new object[] { new DateTime(2020, 10, 1) };
 		yield return new object[] { new DateTime(2020, 11, 1) };

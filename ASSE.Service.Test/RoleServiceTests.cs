@@ -102,11 +102,11 @@ public class RoleServiceTests
 		_mockDataAccess.Verify(x => x.Add(data), Times.Never());
 	}
 
-	private static IEnumerable<object[]> GetRoleById()
+	private static IEnumerable<object?[]> GetRoleById()
 	{
-		yield return new object[] { 1, new Role() { Id = 1, Name = "Admin" } };
-		yield return new object[] { 10, new Role() { Id = 10, Name = "Admin" } };
-		yield return new object[] { 20, null };
+		yield return new object?[] { 1, new Role() { Id = 1, Name = "Admin" } };
+		yield return new object?[] { 10, new Role() { Id = 10, Name = "Admin" } };
+		yield return new object?[] { 20, null };
 	}
 
 	[ComplexTheory]

@@ -102,11 +102,11 @@ public class CurrencyServiceTests
 		_mockDataAccess.Verify(x => x.Add(data), Times.Never());
 	}
 
-	private static IEnumerable<object[]> GetCurrencyById()
+	private static IEnumerable<object?[]> GetCurrencyById()
 	{
-		yield return new object[] { 1, new Currency() { Id = 1, Name = "Euro" } };
-		yield return new object[] { 10, new Currency() { Id = 10, Name = "Ron" } };
-		yield return new object[] { 20, null };
+		yield return new object?[] { 1, new Currency() { Id = 1, Name = "Euro" } };
+		yield return new object?[] { 10, new Currency() { Id = 10, Name = "Ron" } };
+		yield return new object?[] { 20, null };
 	}
 
 	[ComplexTheory]

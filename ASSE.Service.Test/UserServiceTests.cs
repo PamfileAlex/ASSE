@@ -104,11 +104,11 @@ public class UserServiceTests
 		_mockDataAccess.Verify(x => x.Add(data), Times.Never());
 	}
 
-	private static IEnumerable<object[]> GetUserById()
+	private static IEnumerable<object?[]> GetUserById()
 	{
-		yield return new object[] { 1, new User() { Id = 1, FirstName = "Max", LastName = "Verstappen", Score = 650 } };
-		yield return new object[] { 10, new User() { Id = 1, FirstName = "Charles", LastName = "Leclerc", Score = 550 } };
-		yield return new object[] { 20, null };
+		yield return new object?[] { 1, new User() { Id = 1, FirstName = "Max", LastName = "Verstappen", Score = 650 } };
+		yield return new object?[] { 10, new User() { Id = 1, FirstName = "Charles", LastName = "Leclerc", Score = 550 } };
+		yield return new object?[] { 20, null };
 	}
 
 	[ComplexTheory]

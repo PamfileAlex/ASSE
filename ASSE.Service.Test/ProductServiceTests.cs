@@ -103,11 +103,11 @@ public class ProductServiceTests
 		_mockDataAccess.Verify(x => x.Add(data), Times.Never());
 	}
 
-	private static IEnumerable<object[]> GetProductById()
+	private static IEnumerable<object?[]> GetProductById()
 	{
-		yield return new object[] { 1, new Product() { Id = 1, CategoryId = 1, Name = "Dell laptop" } };
-		yield return new object[] { 10, new Product() { Id = 10, CategoryId = 1, Name = "Asus laptop" } };
-		yield return new object[] { 20, null };
+		yield return new object?[] { 1, new Product() { Id = 1, CategoryId = 1, Name = "Dell laptop" } };
+		yield return new object?[] { 10, new Product() { Id = 10, CategoryId = 1, Name = "Asus laptop" } };
+		yield return new object?[] { 20, null };
 	}
 
 	[ComplexTheory]

@@ -26,16 +26,17 @@ namespace ASSE.Core.Test.xUnit
 {
 	public class ComplexNamedDataRowTestCase : TestMethodTestCase, IXunitTestCase
 	{
-		private readonly IMessageSink _MessageSink;
-		private int _AttributeNumber;
-		private string _RowName;
-		private int _Timeout;
+		private readonly IMessageSink _messageSink;
+		private int _attributeNumber;
+		private string _rowName;
+		private int _timeout;
 
 		[EditorBrowsable(EditorBrowsableState.Never)]
 		[Obsolete("Use for deserialization only.")]
 		public ComplexNamedDataRowTestCase()
 		{
-			_MessageSink = new NullMessageSink();
+			_messageSink = new NullMessageSink();
+			_rowName = string.Empty;
 		}
 
 		public ComplexNamedDataRowTestCase(
@@ -51,9 +52,9 @@ namespace ASSE.Core.Test.xUnit
 				  testMethod,
 				  GetTestMethodArguments(testMethod, attributeNumber, rowName, messageSink))
 		{
-			_AttributeNumber = attributeNumber;
-			_RowName = rowName;
-			_MessageSink = messageSink;
+			_attributeNumber = attributeNumber;
+			_rowName = rowName;
+			_messageSink = messageSink;
 		}
 
 		/// <summary>
@@ -90,13 +91,13 @@ namespace ASSE.Core.Test.xUnit
 
 				if (discovererAttribute != null)
 				{
-					var discoverer = ExtensibilityPointFactory.GetTraitDiscoverer(_MessageSink, discovererAttribute);
+					var discoverer = ExtensibilityPointFactory.GetTraitDiscoverer(_messageSink, discovererAttribute);
 					if (discoverer != null)
 						foreach (var keyValuePair in discoverer.GetTraits(traitAttribute))
 							Add(Traits, keyValuePair.Key, keyValuePair.Value);
 				}
 				else
-					_MessageSink.OnMessage(
+					_messageSink.OnMessage(
 						new DiagnosticMessage(
 							$"Trait attribute on '{DisplayName}' did not have [TraitDiscoverer]"));
 			}
@@ -114,16 +115,19 @@ namespace ASSE.Core.Test.xUnit
 				.Concat(testMethod.TestClass.Class.GetCustomAttributes(typeof(ITraitAttribute)));
 		}
 
-		static object[] GetTestMethodArguments(
+
+		static object[]? GetTestMethodArguments(
 			ITestMethod testMethod, int attributeNumber, string rowName, IMessageSink diagnosticMessageSink)
 		{
 			try
 			{
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
 				IAttributeInfo dataAttribute =
 					testMethod.Method
 					.GetCustomAttributes(typeof(DataAttribute))
 					.Where((x, i) => i == attributeNumber)
 					.FirstOrDefault();
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
 
 				if (dataAttribute == null)
 					return null;
@@ -136,10 +140,10 @@ namespace ASSE.Core.Test.xUnit
 
 				IEnumerable<object[]> data = discoverer.GetData(dataAttribute, testMethod.Method);
 
-				if (data is IDictionary<string, object[]>)
-					return ((IDictionary<string, object[]>)data)[rowName];
+				if (data is IDictionary<string, object[]> dictionary)
+					return dictionary[rowName];
 
-				return data.Where(x => x[0].ToString() == rowName).FirstOrDefault();
+				return data.FirstOrDefault(x => x[0].ToString() == rowName);
 			}
 			catch
 			{
@@ -150,16 +154,16 @@ namespace ASSE.Core.Test.xUnit
 		public override void Serialize(IXunitSerializationInfo data)
 		{
 			data.AddValue("TestMethod", TestMethod);
-			data.AddValue("AttributeNumber", _AttributeNumber);
-			data.AddValue("RowName", _RowName);
+			data.AddValue("AttributeNumber", _attributeNumber);
+			data.AddValue("RowName", _rowName);
 		}
 
 		public override void Deserialize(IXunitSerializationInfo data)
 		{
 			TestMethod = data.GetValue<ITestMethod>("TestMethod");
-			_AttributeNumber = data.GetValue<int>("AttributeNumber");
-			_RowName = data.GetValue<string>("RowName");
-			TestMethodArguments = GetTestMethodArguments(TestMethod, _AttributeNumber, _RowName, _MessageSink);
+			_attributeNumber = data.GetValue<int>("AttributeNumber");
+			_rowName = data.GetValue<string>("RowName");
+			TestMethodArguments = GetTestMethodArguments(TestMethod, _attributeNumber, _rowName, _messageSink);
 		}
 
 		protected override string GetUniqueID()
@@ -168,7 +172,7 @@ namespace ASSE.Core.Test.xUnit
 				$"{TestMethod.TestClass.TestCollection.TestAssembly.Assembly.Name};" +
 				$"{TestMethod.TestClass.Class.Name};" +
 				$"{TestMethod.Method.Name};" +
-				$"{_AttributeNumber}/{_RowName}";
+				$"{_attributeNumber}/{_rowName}";
 		}
 
 		/// <inheritdoc/>

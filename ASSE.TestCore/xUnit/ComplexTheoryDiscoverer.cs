@@ -62,9 +62,9 @@ namespace ASSE.Core.Test.xUnit
 						IEnumerable<object[]> data =
 							discoverer.GetData(dataAttributes[index], testMethod.Method).ToList();
 
-						if (data is IDictionary<string, object[]>)
+						if (data is IDictionary<string, object[]> dictionary)
 						{
-							foreach (KeyValuePair<string, object[]> dataRow in (IDictionary<string, object[]>)data)
+							foreach (KeyValuePair<string, object[]> dataRow in dictionary)
 							{
 								var testCase =
 									skipReason != null
@@ -153,7 +153,7 @@ namespace ASSE.Core.Test.xUnit
 
 		protected virtual IXunitTestCase CreateTestCaseForTheory(
 			ITestFrameworkDiscoveryOptions discoveryOptions,
-			ITestMethod testMethod, IAttributeInfo factAttribute, string skipReason = null)
+			ITestMethod testMethod, IAttributeInfo factAttribute, string? skipReason = null)
 		{
 			return new XunitTheoryTestCase(
 				MessageSink,
