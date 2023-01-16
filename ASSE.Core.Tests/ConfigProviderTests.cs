@@ -1,20 +1,38 @@
-﻿using ASSE.Core.Services;
+﻿// --------------------------------------------------------------------------------------
+// <copyright file="ConfigProviderTests.cs" company="Transilvania University of Brasov">
+// Student: Pamfile Alex
+// Course: Arhitectura sistemelor software enterprise. Platforma .NET
+// University: Universitatea Transilvania din Brasov
+// </copyright>
+// --------------------------------------------------------------------------------------
+
+using ASSE.Core.Services;
 using FluentAssertions;
 using Moq;
 using Serilog;
 
 namespace ASSE.Core.Tests;
+
+/// <summary>
+/// Class to test <see cref="IConfigProvider"/>.
+/// </summary>
 public class ConfigProviderTests
 {
 	private readonly IConfigProvider _configProvider;
 	private readonly IMock<ILogger> _mockLogger;
 
+	/// <summary>
+	/// Initializes a new instance of the <see cref="ConfigProviderTests"/> class.
+	/// </summary>
 	public ConfigProviderTests()
 	{
 		_mockLogger = new Mock<ILogger>();
 		_configProvider = new ConfigProvider(_mockLogger.Object);
 	}
 
+	/// <summary>
+	/// Test for <see cref="IConfigProvider.GetConnectionString(string)"/> with empty string as key.
+	/// </summary>
 	[Fact]
 	public void GetConnectionString_EmptyString_ReturnsNull()
 	{
@@ -25,6 +43,9 @@ public class ConfigProviderTests
 		result.Should().BeNull();
 	}
 
+	/// <summary>
+	/// Test for <see cref="IConfigProvider.GetConnectionString(string)"/> with PostgresConnection as key.
+	/// </summary>
 	[Fact]
 	public void GetConnectionString_PostgresConnection_ReturnsNotNull()
 	{
@@ -35,6 +56,9 @@ public class ConfigProviderTests
 		result.Should().NotBeNull();
 	}
 
+	/// <summary>
+	/// Test for <see cref="IConfigProvider.PostgresConnectionString"/>.
+	/// </summary>
 	[Fact]
 	public void PostgresConnectionString_ReturnsNotNull()
 	{
@@ -43,6 +67,11 @@ public class ConfigProviderTests
 		result.Should().NotBeNull();
 	}
 
+	/// <summary>
+	/// Test for <see cref="IConfigProvider.GetValue(string)"/>.
+	/// </summary>
+	/// <param name="key">Key in config file.</param>
+	/// <param name="expected">Expected value from config file.</param>
 	[Theory]
 	[InlineData("", null)]
 	[InlineData("MaxAuctions", "3")]
@@ -54,6 +83,9 @@ public class ConfigProviderTests
 		result.Should().Be(expected);
 	}
 
+	/// <summary>
+	/// Test for <see cref="IConfigProvider.MaxAuctions"/>.
+	/// </summary>
 	[Fact]
 	public void GetValueInt_MaxAuctions_ReturnsExpected()
 	{
@@ -64,6 +96,9 @@ public class ConfigProviderTests
 		result.Should().Be(3);
 	}
 
+	/// <summary>
+	/// Test for <see cref="IConfigProvider.InitialScore"/>.
+	/// </summary>
 	[Fact]
 	public void GetValueDouble_InitialScore_ReturnsExpected()
 	{
@@ -74,6 +109,9 @@ public class ConfigProviderTests
 		result.Should().Be(500.0);
 	}
 
+	/// <summary>
+	/// Test for <see cref="IConfigProvider.GetValue{T}(string)"/> empty string as key.
+	/// </summary>
 	[Fact]
 	public void GetValueT_NotFound_ReturnsNull()
 	{
@@ -84,6 +122,9 @@ public class ConfigProviderTests
 		result.Should().BeNull();
 	}
 
+	/// <summary>
+	///  Test for <see cref="IConfigProvider.GetValue{T}(string)"/> key not in config file.
+	/// </summary>
 	[Fact]
 	public void GetValueT_CantConvert_ReturnsNull()
 	{
@@ -94,6 +135,9 @@ public class ConfigProviderTests
 		result.Should().BeNull();
 	}
 
+	/// <summary>
+	/// Test that <see cref="IConfigProvider.MaxAuctions"/> returns expected.
+	/// </summary>
 	[Fact]
 	public void MaxAuctionsProperty_ReturnsExpected()
 	{
@@ -102,6 +146,9 @@ public class ConfigProviderTests
 		result.Should().Be(3);
 	}
 
+	/// <summary>
+	/// Test that <see cref="IConfigProvider.InitialScore"/> returns expected.
+	/// </summary>
 	[Fact]
 	public void InitialScoreProperty_ReturnsExpected()
 	{

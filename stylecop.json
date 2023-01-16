@@ -17,9 +17,17 @@
       },
       "headerDecoration": "--------------------------------------------------------------------------------------"
     },
-    "indentation": { "useTabs": true },
-    "orderingRules": { "usingDirectivesPlacement": "outsideNamespace" },
-    "namingRules": {},
+    "indentation": {
+      "useTabs": true
+    },
+    "orderingRules": {
+      "usingDirectivesPlacement": "outsideNamespace"
+    },
+    "namingRules": {
+      "allowedNamespaceComponents": [
+        "xUnit"
+      ]
+    },
     "spacingRules": {}
   }
 }
