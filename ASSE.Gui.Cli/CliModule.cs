@@ -1,4 +1,12 @@
-﻿using ASSE.Core;
+﻿// --------------------------------------------------------------------------------------
+// <copyright file="CliModule.cs" company="Transilvania University of Brasov">
+// Student: Pamfile Alex
+// Course: Arhitectura sistemelor software enterprise. Platforma .NET
+// University: Universitatea Transilvania din Brasov
+// </copyright>
+// --------------------------------------------------------------------------------------
+
+using ASSE.Core;
 using ASSE.DataMapper;
 using ASSE.DomainModel;
 using ASSE.Service;
