@@ -16,7 +16,7 @@ namespace ASSE.DataMapper.Interfaces;
 /// Represents database data access for <see cref="IKeyEntity"/>.
 /// Extension of <see cref="ICrud{T}"/>.
 /// </summary>
-/// <typeparam name="T">Entity that implements <see cref="IKeyEntity"/>.</typeparam>
+/// <typeparam name="T">Type of entity that implements <see cref="IKeyEntity"/>.</typeparam>
 public interface IDataAccess<T> : IDataAccess, ICrud<T>
 	where T : class, IKeyEntity, new()
 {

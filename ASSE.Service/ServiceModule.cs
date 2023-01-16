@@ -1,4 +1,12 @@
-﻿using System.Reflection;
+﻿// --------------------------------------------------------------------------------------
+// <copyright file="ServiceModule.cs" company="Transilvania University of Brasov">
+// Student: Pamfile Alex
+// Course: Arhitectura sistemelor software enterprise. Platforma .NET
+// University: Universitatea Transilvania din Brasov
+// </copyright>
+// --------------------------------------------------------------------------------------
+
+using System.Reflection;
 using ASSE.DataMapper;
 using ASSE.DomainModel;
 using ASSE.Service.Interfaces;

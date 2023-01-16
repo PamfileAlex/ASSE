@@ -19,7 +19,7 @@ namespace ASSE.DataMapper.Implementations;
 /// <summary>
 /// Abstract implementation of <see cref="IDataAccess{T}"/>.
 /// </summary>
-/// <typeparam name="T">Entity that implements <see cref="IKeyEntity"/>.</typeparam>
+/// <typeparam name="T">Type of entity that implements <see cref="IKeyEntity"/>.</typeparam>
 public abstract class DataAccess<T> : DataAccess, IDataAccess<T>
 	where T : class, IKeyEntity, new()
 {
