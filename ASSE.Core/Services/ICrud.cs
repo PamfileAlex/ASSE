@@ -32,14 +32,14 @@ public interface ICrud<T> : IService
 	T? Get(int id);
 
 	/// <summary>
-	/// Updated entity.
+	/// Updates entity.
 	/// </summary>
 	/// <param name="data">Entity to be updated.</param>
 	/// <returns><see langword="true"/> if updated, <see langword="false"/> if not found or not modified.</returns>
 	bool Update(T data);
 
 	/// <summary>
-	/// Delete entity.
+	/// Deletes entity.
 	/// </summary>
 	/// <param name="id">Identity of entity to delete.</param>
 	/// <returns><see langword="true"/> if deleted, <see langword="false"/> if not found.</returns>

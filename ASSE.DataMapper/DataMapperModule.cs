@@ -1,4 +1,12 @@
-﻿using System.Reflection;
+﻿// --------------------------------------------------------------------------------------
+// <copyright file="DataMapperModule.cs" company="Transilvania University of Brasov">
+// Student: Pamfile Alex
+// Course: Arhitectura sistemelor software enterprise. Platforma .NET
+// University: Universitatea Transilvania din Brasov
+// </copyright>
+// --------------------------------------------------------------------------------------
+
+using System.Reflection;
 using ASSE.DataMapper.Interfaces;
 using ASSE.DataMapper.Services;
 using Autofac;

@@ -242,3 +242,6 @@ dotnet_diagnostic.SA1309.severity = none
 
 # SA1101: Prefix local calls with this
 dotnet_diagnostic.SA1101.severity = none
+
+# SA1401: Fields should be private
+dotnet_diagnostic.SA1401.severity = none
