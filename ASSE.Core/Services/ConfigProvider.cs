@@ -1,4 +1,12 @@
-﻿using System.Configuration;
+﻿// --------------------------------------------------------------------------------------
+// <copyright file="ConfigProvider.cs" company="Transilvania University of Brasov">
+// Student: Pamfile Alex
+// Course: Arhitectura sistemelor software enterprise. Platforma .NET
+// University: Universitatea Transilvania din Brasov
+// </copyright>
+// --------------------------------------------------------------------------------------
+
+using System.Configuration;
 using Serilog;
 
 namespace ASSE.Core.Services;

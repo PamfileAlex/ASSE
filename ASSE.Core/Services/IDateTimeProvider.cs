@@ -1,4 +1,12 @@
-﻿namespace ASSE.Core.Services;
+﻿// --------------------------------------------------------------------------------------
+// <copyright file="IDateTimeProvider.cs" company="Transilvania University of Brasov">
+// Student: Pamfile Alex
+// Course: Arhitectura sistemelor software enterprise. Platforma .NET
+// University: Universitatea Transilvania din Brasov
+// </copyright>
+// --------------------------------------------------------------------------------------
+
+namespace ASSE.Core.Services;
 
 /// <summary>
 /// Represents a <see cref="DateTime"/> provider that is meant to be mocked.

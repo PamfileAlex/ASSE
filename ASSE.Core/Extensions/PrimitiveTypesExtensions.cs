@@ -1,4 +1,12 @@
-﻿namespace ASSE.Core.Extensions;
+﻿// --------------------------------------------------------------------------------------
+// <copyright file="PrimitiveTypesExtensions.cs" company="Transilvania University of Brasov">
+// Student: Pamfile Alex
+// Course: Arhitectura sistemelor software enterprise. Platforma .NET
+// University: Universitatea Transilvania din Brasov
+// </copyright>
+// --------------------------------------------------------------------------------------
+
+namespace ASSE.Core.Extensions;
 
 /// <summary>
 /// Extensions methods for primitive types (ex: <see cref="int"/>, <see cref="double"/> etc.)

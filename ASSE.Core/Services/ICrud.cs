@@ -1,4 +1,12 @@
-﻿using ASSE.Core.Models;
+﻿// --------------------------------------------------------------------------------------
+// <copyright file="ICrud.cs" company="Transilvania University of Brasov">
+// Student: Pamfile Alex
+// Course: Arhitectura sistemelor software enterprise. Platforma .NET
+// University: Universitatea Transilvania din Brasov
+// </copyright>
+// --------------------------------------------------------------------------------------
+
+using ASSE.Core.Models;
 
 namespace ASSE.Core.Services;
 

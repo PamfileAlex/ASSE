@@ -1,4 +1,12 @@
-﻿using System.Collections.ObjectModel;
+﻿// --------------------------------------------------------------------------------------
+// <copyright file="IDictionaryExtensions.cs" company="Transilvania University of Brasov">
+// Student: Pamfile Alex
+// Course: Arhitectura sistemelor software enterprise. Platforma .NET
+// University: Universitatea Transilvania din Brasov
+// </copyright>
+// --------------------------------------------------------------------------------------
+
+using System.Collections.ObjectModel;
 
 namespace ASSE.Core.Extensions;
 
@@ -8,7 +16,7 @@ namespace ASSE.Core.Extensions;
 public static class IDictionaryExtensions
 {
 	/// <summary>
-	/// Converts a <see cref="IDictionary{TKey, TValue}"/> instance to <see cref="ReadOnlyDictionary{TKey, TValue}"/> using its constructor./>
+	/// Converts a <see cref="IDictionary{TKey, TValue}"/> instance to <see cref="ReadOnlyDictionary{TKey, TValue}"/> using its constructor.
 	/// </summary>
 	/// <typeparam name="TKey">The type of keys in the dictionary.</typeparam>
 	/// <typeparam name="TValue">The type of values in the dictionary.</typeparam>

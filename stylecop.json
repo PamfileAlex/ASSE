@@ -9,7 +9,13 @@
   "settings": {
     "documentationRules": {
       "companyName": "Transilvania University of Brasov",
-      "copyrightText": "Pamfile Alex"
+      "copyrightText": "Student: {studentName}\nCourse: {courseName}\nUniversity: {universityName}",
+      "variables": {
+        "studentName": "Pamfile Alex",
+        "courseName": "Arhitectura sistemelor software enterprise. Platforma .NET",
+        "universityName": "Universitatea Transilvania din Brasov"
+      },
+      "headerDecoration": "--------------------------------------------------------------------------------------"
     },
     "indentation": { "useTabs": true },
     "orderingRules": { "usingDirectivesPlacement": "outsideNamespace" },

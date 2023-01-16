@@ -1,4 +1,12 @@
-﻿using ASSE.Core.Services;
+﻿// --------------------------------------------------------------------------------------
+// <copyright file="CoreModule.cs" company="Transilvania University of Brasov">
+// Student: Pamfile Alex
+// Course: Arhitectura sistemelor software enterprise. Platforma .NET
+// University: Universitatea Transilvania din Brasov
+// </copyright>
+// --------------------------------------------------------------------------------------
+
+using ASSE.Core.Services;
 using Autofac;
 using AutofacSerilogIntegration;
 using Serilog;
