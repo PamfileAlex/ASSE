@@ -1,18 +1,35 @@
+// --------------------------------------------------------------------------------------
+// <copyright file="UserValidatorTests.cs" company="Transilvania University of Brasov">
+// Student: Pamfile Alex
+// Course: Arhitectura sistemelor software enterprise. Platforma .NET
+// University: Universitatea Transilvania din Brasov
+// </copyright>
+// --------------------------------------------------------------------------------------
+
 using ASSE.DomainModel.Models;
 using ASSE.DomainModel.Validators;
 using FluentValidation.TestHelper;
 
 namespace ASSE.DomainModel.Tests;
 
+/// <summary>
+/// Tests for <see cref="UserValidator"/>.
+/// </summary>
 public class UserValidatorTests
 {
 	private readonly UserValidator _validator;
 
+	/// <summary>
+	/// Initializes a new instance of the <see cref="UserValidatorTests"/> class.
+	/// </summary>
 	public UserValidatorTests()
 	{
 		_validator = new UserValidator();
 	}
 
+	/// <summary>
+	/// Test for valid <see cref="User"/>.
+	/// </summary>
 	[Fact]
 	public void Validate_ValidUser_NoErrors()
 	{
@@ -26,10 +43,13 @@ public class UserValidatorTests
 
 		var result = _validator.TestValidate(user);
 
-		//result.IsValid.Should().BeTrue();
+		// result.IsValid.Should().BeTrue();
 		result.ShouldNotHaveAnyValidationErrors();
 	}
 
+	/// <summary>
+	/// Test that default <see cref="User"/> fails.
+	/// </summary>
 	[Fact]
 	public void Validate_DefaultUser_Fails()
 	{
@@ -37,10 +57,14 @@ public class UserValidatorTests
 
 		var result = _validator.TestValidate(user);
 
-		//result.IsValid.Should().BeFalse();
+		// result.IsValid.Should().BeFalse();
 		result.ShouldHaveAnyValidationError();
 	}
 
+	/// <summary>
+	/// Test that invalid <see cref="User.FirstName"/> fails.
+	/// </summary>
+	/// <param name="firstName">Parametrized firstName value.</param>
 	[Theory]
 	[InlineData(null)]
 	[InlineData("")]
@@ -56,10 +80,14 @@ public class UserValidatorTests
 
 		var result = _validator.TestValidate(user);
 
-		//result.IsValid.Should().BeFalse();
+		// result.IsValid.Should().BeFalse();
 		result.ShouldHaveValidationErrorFor(user => user.FirstName);
 	}
 
+	/// <summary>
+	/// Test that invalid <see cref="User.LastName"/> fails.
+	/// </summary>
+	/// <param name="lastName">Parametrized lastName value.</param>
 	[Theory]
 	[InlineData(null)]
 	[InlineData("")]
@@ -75,10 +103,14 @@ public class UserValidatorTests
 
 		var result = _validator.TestValidate(user);
 
-		//result.IsValid.Should().BeFalse();
+		// result.IsValid.Should().BeFalse();
 		result.ShouldHaveValidationErrorFor(user => user.LastName);
 	}
 
+	/// <summary>
+	/// Test that invalid <see cref="User.Score"/> fails.
+	/// </summary>
+	/// <param name="score">Parametrized score value.</param>
 	[Theory]
 	[InlineData(0.0)]
 	[InlineData(-1.0)]
@@ -93,7 +125,7 @@ public class UserValidatorTests
 
 		var result = _validator.TestValidate(user);
 
-		//result.IsValid.Should().BeFalse();
+		// result.IsValid.Should().BeFalse();
 		result.ShouldHaveValidationErrorFor(user => user.Score);
 	}
 }

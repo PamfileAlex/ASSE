@@ -1,17 +1,35 @@
-﻿using ASSE.DomainModel.Models;
+﻿// --------------------------------------------------------------------------------------
+// <copyright file="CategoryValidatorTests.cs" company="Transilvania University of Brasov">
+// Student: Pamfile Alex
+// Course: Arhitectura sistemelor software enterprise. Platforma .NET
+// University: Universitatea Transilvania din Brasov
+// </copyright>
+// --------------------------------------------------------------------------------------
+
+using ASSE.DomainModel.Models;
 using ASSE.DomainModel.Validators;
 using FluentValidation.TestHelper;
 
 namespace ASSE.DomainModel.Tests;
+
+/// <summary>
+/// Tests for <see cref="CategoryValidator"/>.
+/// </summary>
 public class CategoryValidatorTests
 {
-	public readonly CategoryValidator _validator;
+	private readonly CategoryValidator _validator;
 
+	/// <summary>
+	/// Initializes a new instance of the <see cref="CategoryValidatorTests"/> class.
+	/// </summary>
 	public CategoryValidatorTests()
 	{
 		_validator = new CategoryValidator();
 	}
 
+	/// <summary>
+	/// Test for valid <see cref="Category"/>.
+	/// </summary>
 	[Fact]
 	public void Validate_ValidCategory_NoErrors()
 	{
@@ -24,10 +42,27 @@ public class CategoryValidatorTests
 
 		var result = _validator.TestValidate(category);
 
-		//result.IsValid.Should().BeTrue();
+		// result.IsValid.Should().BeTrue();
 		result.ShouldNotHaveAnyValidationErrors();
 	}
 
+	/// <summary>
+	/// Test that default <see cref="Category"/> fails.
+	/// </summary>
+	[Fact]
+	public void Validate_DefaultCategory_Fails()
+	{
+		var category = new Category();
+
+		var result = _validator.TestValidate(category);
+
+		// result.IsValid.Should().BeFalse();
+		result.ShouldHaveAnyValidationError();
+	}
+
+	/// <summary>
+	/// Test for valid <see cref="Category.ParentId"/>.
+	/// </summary>
 	[Fact]
 	public void Validate_ValidCategoryNoParent_NoErrors()
 	{
@@ -40,21 +75,14 @@ public class CategoryValidatorTests
 
 		var result = _validator.TestValidate(category);
 
-		//result.IsValid.Should().BeTrue();
+		// result.IsValid.Should().BeTrue();
 		result.ShouldNotHaveAnyValidationErrors();
 	}
 
-	[Fact]
-	public void Validate_DefaultCategory_Fails()
-	{
-		var category = new Category();
-
-		var result = _validator.TestValidate(category);
-
-		//result.IsValid.Should().BeFalse();
-		result.ShouldHaveAnyValidationError();
-	}
-
+	/// <summary>
+	/// Test that invalid <see cref="Category.Name"/> fails.
+	/// </summary>
+	/// <param name="name">Parametrized name value.</param>
 	[Theory]
 	[InlineData(null)]
 	[InlineData("")]
@@ -68,7 +96,7 @@ public class CategoryValidatorTests
 
 		var result = _validator.TestValidate(category);
 
-		//result.IsValid.Should().BeFalse();
+		// result.IsValid.Should().BeFalse();
 		result.ShouldHaveValidationErrorFor(category => category.Name);
 	}
 }

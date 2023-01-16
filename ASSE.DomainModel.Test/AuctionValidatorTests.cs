@@ -1,21 +1,39 @@
-﻿using ASSE.Core.Services;
+﻿// --------------------------------------------------------------------------------------
+// <copyright file="AuctionValidatorTests.cs" company="Transilvania University of Brasov">
+// Student: Pamfile Alex
+// Course: Arhitectura sistemelor software enterprise. Platforma .NET
+// University: Universitatea Transilvania din Brasov
+// </copyright>
+// --------------------------------------------------------------------------------------
+
+using ASSE.Core.Services;
 using ASSE.DomainModel.Models;
 using ASSE.DomainModel.Validators;
 using FluentValidation.TestHelper;
 using Moq;
 
 namespace ASSE.DomainModel.Tests;
+
+/// <summary>
+/// Tests for <see cref="AuctionValidator"/>.
+/// </summary>
 public class AuctionValidatorTests
 {
 	private readonly AuctionValidator _validator;
 	private readonly Mock<IDateTimeProvider> _dateTimeProvider;
 
+	/// <summary>
+	/// Initializes a new instance of the <see cref="AuctionValidatorTests"/> class.
+	/// </summary>
 	public AuctionValidatorTests()
 	{
 		_dateTimeProvider = new Mock<IDateTimeProvider>();
 		_validator = new AuctionValidator(_dateTimeProvider.Object);
 	}
 
+	/// <summary>
+	/// Test for valid <see cref="Auction"/>.
+	/// </summary>
 	[Fact]
 	public void Validate_ValidAuction_NoErrors()
 	{
@@ -33,7 +51,7 @@ public class AuctionValidatorTests
 			EndDate = new DateTime(2020, 12, 1),
 			StartingPrice = 100,
 			CurrentPrice = 200,
-			IsActive = true
+			IsActive = true,
 		};
 
 		var result = _validator.TestValidate(auction);
@@ -46,6 +64,10 @@ public class AuctionValidatorTests
 		yield return new object[] { new DateTime(2020, 11, 2) };
 	}
 
+	/// <summary>
+	/// Test for valid <see cref="Auction.StartDate"/>.
+	/// </summary>
+	/// <param name="dateTime"><see cref="DateTime"/> instance.</param>
 	[Theory]
 	[MemberData(nameof(GetValidStartDateTimes))]
 	public void Validate_ValidStartDate_NoErrorsForStartDate(DateTime dateTime)
@@ -54,7 +76,7 @@ public class AuctionValidatorTests
 
 		var auction = new Auction()
 		{
-			StartDate = dateTime
+			StartDate = dateTime,
 		};
 
 		var result = _validator.TestValidate(auction);
@@ -62,6 +84,9 @@ public class AuctionValidatorTests
 		result.ShouldNotHaveValidationErrorFor(auction => auction.StartDate);
 	}
 
+	/// <summary>
+	/// Test that default <see cref="Auction"/> fails.
+	/// </summary>
 	[Fact]
 	public void Validate_DefaultAuction_Fails()
 	{
@@ -72,6 +97,9 @@ public class AuctionValidatorTests
 		result.ShouldHaveAnyValidationError();
 	}
 
+	/// <summary>
+	/// Test that invalid <see cref="Auction.OwnerId"/> fails.
+	/// </summary>
 	[Fact]
 	public void Validate_InvalidOwnerId_Fails()
 	{
@@ -82,6 +110,9 @@ public class AuctionValidatorTests
 		result.ShouldHaveValidationErrorFor(auction => auction.OwnerId);
 	}
 
+	/// <summary>
+	/// Test that invalid <see cref="Auction.ProductId"/> fails.
+	/// </summary>
 	[Fact]
 	public void Validate_InvalidProductId_Fails()
 	{
@@ -92,6 +123,9 @@ public class AuctionValidatorTests
 		result.ShouldHaveValidationErrorFor(auction => auction.ProductId);
 	}
 
+	/// <summary>
+	/// Test that invalid <see cref="Auction.CurrencyId"/> fails.
+	/// </summary>
 	[Fact]
 	public void Validate_InvalidCurrencyId_Fails()
 	{
@@ -102,6 +136,10 @@ public class AuctionValidatorTests
 		result.ShouldHaveValidationErrorFor(auction => auction.CurrencyId);
 	}
 
+	/// <summary>
+	/// Test that invalid <see cref="Auction.Description"/> fails.
+	/// </summary>
+	/// <param name="description">Parametrized description value.</param>
 	[Theory]
 	[InlineData(null)]
 	[InlineData("")]
@@ -110,7 +148,7 @@ public class AuctionValidatorTests
 	{
 		var auction = new Auction()
 		{
-			Description = description
+			Description = description,
 		};
 
 		var result = _validator.TestValidate(auction);
@@ -118,13 +156,16 @@ public class AuctionValidatorTests
 		result.ShouldHaveValidationErrorFor(auction => auction.Description);
 	}
 
-
 	private static IEnumerable<object[]> GetInvalidStartDateTimes()
 	{
 		yield return new object[] { default(DateTime) };
 		yield return new object[] { new DateTime(2020, 10, 1) };
 	}
 
+	/// <summary>
+	/// Test that invalid <see cref="Auction.StartDate"/> fails.
+	/// </summary>
+	/// <param name="dateTime">Parametrized start date time value.</param>
 	[Theory]
 	[MemberData(nameof(GetInvalidStartDateTimes))]
 	public void Validate_InvalidStartDate_Fails(DateTime dateTime)
@@ -147,6 +188,10 @@ public class AuctionValidatorTests
 		yield return new object[] { new DateTime(2020, 11, 1) };
 	}
 
+	/// <summary>
+	/// Test that invalid <see cref="Auction.EndDate"/> fails.
+	/// </summary>
+	/// <param name="dateTime">Parametrized end date time value.</param>
 	[Theory]
 	[MemberData(nameof(GetInvalidEndDateTimes))]
 	public void Validate_InvalidEndDate_Fails(DateTime dateTime)
@@ -163,6 +208,10 @@ public class AuctionValidatorTests
 		result.ShouldHaveValidationErrorFor(auction => auction.EndDate);
 	}
 
+	/// <summary>
+	/// Test that invalid <see cref="Auction.StartingPrice"/> fails.
+	/// </summary>
+	/// <param name="startingPrice">Parametrized starting price value.</param>
 	[Theory]
 	[InlineData(0.0)]
 	[InlineData(-1.0)]
@@ -178,6 +227,10 @@ public class AuctionValidatorTests
 		result.ShouldHaveValidationErrorFor(auction => auction.StartingPrice);
 	}
 
+	/// <summary>
+	/// Test that invalid <see cref="Auction.CurrentPrice"/> fails.
+	/// </summary>
+	/// <param name="currentPrice">Parametrized current price value.</param>
 	[Theory]
 	[InlineData(0.0)]
 	[InlineData(-1.0)]
