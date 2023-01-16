@@ -39,7 +39,7 @@ public class CoreModule : Module
 		SetupLogger();
 
 		builder.RegisterLogger(Log.Logger);
-		builder.RegisterType<ConfigProvider>().As<IConfigProvider>();
-		builder.RegisterType<DateTimeProvider>().As<IDateTimeProvider>();
+		builder.RegisterType<ConfigProvider>().As<IConfigProvider>().AsSelf();
+		builder.RegisterType<DateTimeProvider>().As<IDateTimeProvider>().AsSelf();
 	}
 }
