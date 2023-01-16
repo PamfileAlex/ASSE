@@ -33,7 +33,7 @@ public class ProductDataAccess : DataAccess<Product>, IProductDataAccess
 	/// <inheritdoc/>
 	public List<Product> GetAllByCategoryId(int categoryId)
 	{
-		using IDbConnection connection = _dbConnectionProvider.GetNewConnection();
+		using IDbConnection connection = DbConnectionProvider.GetNewConnection();
 		connection.Open();
 		return GetAllByCategoryId(categoryId, connection);
 	}
@@ -41,7 +41,7 @@ public class ProductDataAccess : DataAccess<Product>, IProductDataAccess
 	/// <inheritdoc/>
 	public List<Product> GetAllByCategoryId(int categoryId, IDbConnection connection, IDbTransaction? transaction = null)
 	{
-		_logger.Debug("Getting All by categoryId: {categoryId}", categoryId);
+		Logger.Debug("Getting All by categoryId: {categoryId}", categoryId);
 
 		string sql = @"SELECT * FROM Products
 							WHERE CategoryId=@categoryId";

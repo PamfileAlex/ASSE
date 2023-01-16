@@ -18,16 +18,16 @@ public abstract class GenericService<TD>
 	where TD : IDataAccess
 {
 	/// <summary>
-	/// Data access for service.
-	/// </summary>
-	protected readonly TD _dataAccess;
-
-	/// <summary>
 	/// Initializes a new instance of the <see cref="GenericService{TD}"/> class.
 	/// </summary>
 	/// <param name="dataAccess">Data access that implements <see cref="IDataAccess"/>.</param>
 	protected GenericService(TD dataAccess)
 	{
-		_dataAccess = dataAccess;
+		DataAccess = dataAccess;
 	}
+
+	/// <summary>
+	/// Gets data access for service.
+	/// </summary>
+	protected TD DataAccess { get; }
 }

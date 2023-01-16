@@ -39,14 +39,14 @@ public class AuctionService : EntityService<Auction, IAuctionDataAccess>, IAucti
 	public List<Auction> GetAllActive()
 	{
 		Log.Debug("Getting all active");
-		return _dataAccess.GetAllActive();
+		return DataAccess.GetAllActive();
 	}
 
 	/// <inheritdoc/>
 	public List<Auction> GetAllActiveByOwnerId(int ownerId)
 	{
 		Log.Debug("Getting all active by ownerId: {ownerId}", ownerId);
-		return _dataAccess.GetAllActiveByOwnerId(ownerId);
+		return DataAccess.GetAllActiveByOwnerId(ownerId);
 	}
 
 	/// <inheritdoc/>

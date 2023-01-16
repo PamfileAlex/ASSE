@@ -34,9 +34,9 @@ public abstract class PairTableRelationDataAccess<T> : TableRelationDataAccess, 
 	/// <inheritdoc/>
 	public virtual void Add(int first, int second)
 	{
-		_logger.Debug("Adding: ({first}, {second})", first, second);
+		Logger.Debug("Adding: ({first}, {second})", first, second);
 
-		using IDbConnection connection = _dbConnectionProvider.GetNewConnection();
+		using IDbConnection connection = DbConnectionProvider.GetNewConnection();
 		connection.Open();
 		Add(first, second, connection);
 	}
@@ -47,9 +47,9 @@ public abstract class PairTableRelationDataAccess<T> : TableRelationDataAccess, 
 	/// <inheritdoc/>
 	public virtual bool Delete(int first, int second)
 	{
-		_logger.Debug("Deleting: ({first}, {second})", first, second);
+		Logger.Debug("Deleting: ({first}, {second})", first, second);
 
-		using IDbConnection connection = _dbConnectionProvider.GetNewConnection();
+		using IDbConnection connection = DbConnectionProvider.GetNewConnection();
 		connection.Open();
 		return Delete(first, second, connection);
 	}
@@ -60,9 +60,9 @@ public abstract class PairTableRelationDataAccess<T> : TableRelationDataAccess, 
 	/// <inheritdoc/>
 	public virtual List<T> GetAll()
 	{
-		_logger.Debug("Getting all");
+		Logger.Debug("Getting all");
 
-		using IDbConnection connection = _dbConnectionProvider.GetNewConnection();
+		using IDbConnection connection = DbConnectionProvider.GetNewConnection();
 		connection.Open();
 		return GetAll(connection);
 	}

@@ -24,11 +24,6 @@ public abstract class EntityService<T, TD> : GenericService<TD>, IEntityService<
 	where TD : IDataAccess<T>
 {
 	/// <summary>
-	/// Validator for entity of type <typeparamref name="T"/> that implements <see cref="IKeyEntity"/>.
-	/// </summary>
-	protected readonly IValidator<T> _validator;
-
-	/// <summary>
 	/// Initializes a new instance of the <see cref="EntityService{T, TD}"/> class.
 	/// </summary>
 	/// <param name="dataAccess">Data access that implements <see cref="IDataAccess"/>.</param>
@@ -36,8 +31,13 @@ public abstract class EntityService<T, TD> : GenericService<TD>, IEntityService<
 	public EntityService(TD dataAccess, IValidator<T> validator)
 		: base(dataAccess)
 	{
-		_validator = validator;
+		Validator = validator;
 	}
+
+	/// <summary>
+	/// Gets validator for entity of type <typeparamref name="T"/> that implements <see cref="IKeyEntity"/>.
+	/// </summary>
+	protected IValidator<T> Validator { get; }
 
 	/// <inheritdoc/>
 	public virtual int Add(T data)
@@ -48,7 +48,7 @@ public abstract class EntityService<T, TD> : GenericService<TD>, IEntityService<
 			return default;
 		}
 
-		return _dataAccess.Add(data);
+		return DataAccess.Add(data);
 	}
 
 	/// <summary>
@@ -59,14 +59,14 @@ public abstract class EntityService<T, TD> : GenericService<TD>, IEntityService<
 	public virtual bool ValidateAdd(T data)
 	{
 		Log.Debug("Validating add: {data}", data);
-		return _validator.Validate(data).IsValid;
+		return Validator.Validate(data).IsValid;
 	}
 
 	/// <inheritdoc/>
 	public virtual T? Get(int id)
 	{
 		Log.Debug("Getting by id: {id}", id);
-		return _dataAccess.Get(id);
+		return DataAccess.Get(id);
 	}
 
 	/// <inheritdoc/>
@@ -78,7 +78,7 @@ public abstract class EntityService<T, TD> : GenericService<TD>, IEntityService<
 			return false;
 		}
 
-		return _dataAccess.Update(data);
+		return DataAccess.Update(data);
 	}
 
 	/// <summary>
@@ -94,20 +94,20 @@ public abstract class EntityService<T, TD> : GenericService<TD>, IEntityService<
 			return false;
 		}
 
-		return _validator.Validate(data).IsValid;
+		return Validator.Validate(data).IsValid;
 	}
 
 	/// <inheritdoc/>
 	public virtual bool Delete(int id)
 	{
 		Log.Debug("Deleting by id: {id}", id);
-		return _dataAccess.Delete(id);
+		return DataAccess.Delete(id);
 	}
 
 	/// <inheritdoc/>
 	public virtual List<T> GetAll()
 	{
 		Log.Debug("Getting all");
-		return _dataAccess.GetAll();
+		return DataAccess.GetAll();
 	}
 }

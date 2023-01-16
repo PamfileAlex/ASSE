@@ -22,16 +22,6 @@ namespace ASSE.DataMapper.Implementations;
 public class UserRoleDataAccess : PairTableRelationDataAccess<UserRole>, IUserRoleDataAccess
 {
 	/// <summary>
-	/// Data access for <see cref="User"/>.
-	/// </summary>
-	protected readonly IUserDataAccess _userDataAccess;
-
-	/// <summary>
-	/// Data access for <see cref="Role"/>.
-	/// </summary>
-	protected readonly IRoleDataAccess _roleDataAccess;
-
-	/// <summary>
 	/// Initializes a new instance of the <see cref="UserRoleDataAccess"/> class.
 	/// </summary>
 	/// <param name="dbConnectionProvider">Database connection provider instance.</param>
@@ -45,9 +35,19 @@ public class UserRoleDataAccess : PairTableRelationDataAccess<UserRole>, IUserRo
 		ILogger logger)
 		: base(dbConnectionProvider, logger)
 	{
-		_userDataAccess = userDataAccess;
-		_roleDataAccess = roleDataAccess;
+		UserDataAccess = userDataAccess;
+		RoleDataAccess = roleDataAccess;
 	}
+
+	/// <summary>
+	/// Gets data access for <see cref="User"/>.
+	/// </summary>
+	protected IUserDataAccess UserDataAccess { get; }
+
+	/// <summary>
+	/// Gets data access for <see cref="Role"/>.
+	/// </summary>
+	protected IRoleDataAccess RoleDataAccess { get; }
 
 	/// <inheritdoc cref="IUserRoleDataAccess.Add(int, int)"/>
 	public override void Add(int userId, int roleId)
@@ -58,7 +58,7 @@ public class UserRoleDataAccess : PairTableRelationDataAccess<UserRole>, IUserRo
 	/// <inheritdoc cref="IUserRoleDataAccess.Add(int, int, IDbConnection, IDbTransaction?)"/>
 	public override void Add(int userId, int roleId, IDbConnection connection, IDbTransaction? transaction = null)
 	{
-		_logger.Debug("Adding: ({userId}, {roleId})", userId, roleId);
+		Logger.Debug("Adding: ({userId}, {roleId})", userId, roleId);
 
 		string sql = @"INSERT INTO User_Role
 						(UserId, RoleId)
@@ -76,7 +76,7 @@ public class UserRoleDataAccess : PairTableRelationDataAccess<UserRole>, IUserRo
 	/// <inheritdoc cref="IUserRoleDataAccess.Delete(int, int, IDbConnection, IDbTransaction?)"/>
 	public override bool Delete(int userId, int roleId, IDbConnection connection, IDbTransaction? transaction = null)
 	{
-		_logger.Debug("Deleting: ({userId}, {roleId})", userId, roleId);
+		Logger.Debug("Deleting: ({userId}, {roleId})", userId, roleId);
 
 		string sql = @"DELETE FROM User_Role
 							WHERE UserId=@userId
@@ -94,7 +94,7 @@ public class UserRoleDataAccess : PairTableRelationDataAccess<UserRole>, IUserRo
 	/// <inheritdoc cref="IUserRoleDataAccess.GetAll(IDbConnection, IDbTransaction?)"/>
 	public override List<UserRole> GetAll(IDbConnection connection, IDbTransaction? transaction = null)
 	{
-		_logger.Debug("Getting all");
+		Logger.Debug("Getting all");
 
 		string sql = @"SELECT * FROM User_Role";
 
@@ -106,7 +106,7 @@ public class UserRoleDataAccess : PairTableRelationDataAccess<UserRole>, IUserRo
 	/// <inheritdoc/>
 	public List<User> GetAllUsersByRoleId(int roleId)
 	{
-		using IDbConnection connection = _dbConnectionProvider.GetNewConnection();
+		using IDbConnection connection = DbConnectionProvider.GetNewConnection();
 		connection.Open();
 		return GetAllUsersByRoleId(roleId, connection);
 	}
@@ -114,18 +114,18 @@ public class UserRoleDataAccess : PairTableRelationDataAccess<UserRole>, IUserRo
 	/// <inheritdoc/>
 	public List<User> GetAllUsersByRoleId(int roleId, IDbConnection connection, IDbTransaction? transaction = null)
 	{
-		_logger.Debug("Getting all users by roleId: {roleId}", roleId);
+		Logger.Debug("Getting all users by roleId: {roleId}", roleId);
 
 		string sql = @"SELECT UserId FROM User_Role
 							WHERE RoleId=@id";
 
-		return GetAllByRelationId<User>(sql, _userDataAccess, roleId, connection, transaction);
+		return GetAllByRelationId<User>(sql, UserDataAccess, roleId, connection, transaction);
 	}
 
 	/// <inheritdoc/>
 	public List<Role> GetAllRolesByUserId(int userId)
 	{
-		using IDbConnection connection = _dbConnectionProvider.GetNewConnection();
+		using IDbConnection connection = DbConnectionProvider.GetNewConnection();
 		connection.Open();
 		return GetAllRolesByUserId(userId, connection);
 	}
@@ -133,11 +133,11 @@ public class UserRoleDataAccess : PairTableRelationDataAccess<UserRole>, IUserRo
 	/// <inheritdoc/>
 	public List<Role> GetAllRolesByUserId(int userId, IDbConnection connection, IDbTransaction? transaction = null)
 	{
-		_logger.Debug("Getting all roles by userId: {userId}", userId);
+		Logger.Debug("Getting all roles by userId: {userId}", userId);
 
 		string sql = @"SELECT RoleId FROM User_Role
 							WHERE UserId=@id";
 
-		return GetAllByRelationId<Role>(sql, _roleDataAccess, userId, connection, transaction);
+		return GetAllByRelationId<Role>(sql, RoleDataAccess, userId, connection, transaction);
 	}
 }

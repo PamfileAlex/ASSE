@@ -43,7 +43,7 @@ public abstract class TableRelationDataAccess : DataAccess, ITableRelationDataAc
 	protected List<T> GetAllByRelationId<T>(string sql, IDataAccess<T> dataAccess, int id, IDbConnection connection, IDbTransaction? transaction = null)
 		where T : class, IKeyEntity, new()
 	{
-		_logger.Debug("Getting All by relationId: {id}", id);
+		Logger.Debug("Getting All by relationId: {id}", id);
 
 		List<T> data = dataAccess.GetAll();
 

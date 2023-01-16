@@ -33,7 +33,7 @@ public class AuctionDataAccess : DataAccess<Auction>, IAuctionDataAccess
 	/// <inheritdoc/>
 	public List<Auction> GetAllActive()
 	{
-		using IDbConnection connection = _dbConnectionProvider.GetNewConnection();
+		using IDbConnection connection = DbConnectionProvider.GetNewConnection();
 		connection.Open();
 		return GetAllActive(connection);
 	}
@@ -41,7 +41,7 @@ public class AuctionDataAccess : DataAccess<Auction>, IAuctionDataAccess
 	/// <inheritdoc/>
 	public List<Auction> GetAllActive(IDbConnection connection, IDbTransaction? transaction = null)
 	{
-		_logger.Debug("Getting all active");
+		Logger.Debug("Getting all active");
 
 		string sql = @"SELECT * FROM Auctions
 							WHERE IsActive=TRUE";
@@ -52,7 +52,7 @@ public class AuctionDataAccess : DataAccess<Auction>, IAuctionDataAccess
 	/// <inheritdoc/>
 	public List<Auction> GetAllActiveByOwnerId(int ownerId)
 	{
-		using IDbConnection connection = _dbConnectionProvider.GetNewConnection();
+		using IDbConnection connection = DbConnectionProvider.GetNewConnection();
 		connection.Open();
 		return GetAllActiveByOwnerId(ownerId, connection);
 	}
@@ -60,7 +60,7 @@ public class AuctionDataAccess : DataAccess<Auction>, IAuctionDataAccess
 	/// <inheritdoc/>
 	public List<Auction> GetAllActiveByOwnerId(int ownerId, IDbConnection connection, IDbTransaction? transaction = null)
 	{
-		_logger.Debug("Getting all active by ownerId: {ownerId}", ownerId);
+		Logger.Debug("Getting all active by ownerId: {ownerId}", ownerId);
 
 		string sql = @"SELECT * FROM Auctions
 							WHERE IsActive=TRUE

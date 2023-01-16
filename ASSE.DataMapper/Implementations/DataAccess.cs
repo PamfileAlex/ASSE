@@ -18,23 +18,23 @@ namespace ASSE.DataMapper.Implementations;
 public abstract class DataAccess : IDataAccess
 {
 	/// <summary>
-	/// Database connection provider.
-	/// </summary>
-	protected readonly IDbConnectionProvider _dbConnectionProvider;
-
-	/// <summary>
-	/// Serilog logger.
-	/// </summary>
-	protected readonly ILogger _logger;
-
-	/// <summary>
 	/// Initializes a new instance of the <see cref="DataAccess"/> class.
 	/// </summary>
 	/// <param name="dbConnectionProvider">Database connection provider instance.</param>
 	/// <param name="logger">Serilog <see cref="ILogger"/> instance.</param>
 	protected DataAccess(IDbConnectionProvider dbConnectionProvider, ILogger logger)
 	{
-		_dbConnectionProvider = dbConnectionProvider;
-		_logger = logger;
+		DbConnectionProvider = dbConnectionProvider;
+		Logger = logger;
 	}
+
+	/// <summary>
+	/// Gets database connection provider.
+	/// </summary>
+	protected IDbConnectionProvider DbConnectionProvider { get; }
+
+	/// <summary>
+	/// Gets serilog logger.
+	/// </summary>
+	protected ILogger Logger { get; }
 }
