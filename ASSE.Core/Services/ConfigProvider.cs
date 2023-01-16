@@ -52,9 +52,14 @@ public class ConfigProvider : IConfigProvider
 	public T? GetValue<T>(string key)
 		where T : struct
 	{
+		string? value = GetValue(key);
+		if (value is null)
+		{
+			return null;
+		}
+
 		try
 		{
-			string? value = GetValue(key);
 			return (T)Convert.ChangeType(value, typeof(T));
 		}
 		catch

@@ -75,13 +75,23 @@ public class ConfigProviderTests
 	}
 
 	[Fact]
-	public void GetValueT_Invalid_ReturnsDefault()
+	public void GetValueT_NotFound_ReturnsNull()
 	{
 		var key = string.Empty;
 
 		var result = _configProvider.GetValue<int>(key);
 
-		result.Should().Be(default);
+		result.Should().BeNull();
+	}
+
+	[Fact]
+	public void GetValueT_CantConvert_ReturnsNull()
+	{
+		var key = "TestValue";
+
+		var result = _configProvider.GetValue<int>(key);
+
+		result.Should().BeNull();
 	}
 
 	[Fact]
