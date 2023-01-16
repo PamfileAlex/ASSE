@@ -1,4 +1,12 @@
-﻿using System.Reflection;
+﻿// --------------------------------------------------------------------------------------
+// <copyright file="DomainModelModule.cs" company="Transilvania University of Brasov">
+// Student: Pamfile Alex
+// Course: Arhitectura sistemelor software enterprise. Platforma .NET
+// University: Universitatea Transilvania din Brasov
+// </copyright>
+// --------------------------------------------------------------------------------------
+
+using System.Reflection;
 using ASSE.Core;
 using Autofac;
 using FluentValidation;
