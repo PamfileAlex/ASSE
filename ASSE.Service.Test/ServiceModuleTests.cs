@@ -1,15 +1,29 @@
-using Autofac.Builder;
+// --------------------------------------------------------------------------------------
+// <copyright file="ServiceModuleTests.cs" company="Transilvania University of Brasov">
+// Student: Pamfile Alex
+// Course: Arhitectura sistemelor software enterprise. Platforma .NET
+// University: Universitatea Transilvania din Brasov
+// </copyright>
+// --------------------------------------------------------------------------------------
+
+using ASSE.Service.Implementations;
 using Autofac;
+using Autofac.Builder;
 using FluentAssertions;
 using FluentAssertions.Autofac;
-using ASSE.Service.Implementations;
 
 namespace ASSE.Service.Tests;
 
+/// <summary>
+/// Tests for <see cref="ServiceModule"/>.
+/// </summary>
 public class ServiceModuleTests
 {
 	private readonly IContainer _container;
 
+	/// <summary>
+	/// Initializes a new instance of the <see cref="ServiceModuleTests"/> class.
+	/// </summary>
 	public ServiceModuleTests()
 	{
 		var builder = new ContainerBuilder();
@@ -17,6 +31,9 @@ public class ServiceModuleTests
 		_container = builder.Build(ContainerBuildOptions.IgnoreStartableComponents);
 	}
 
+	/// <summary>
+	/// Test that all services are registered.
+	/// </summary>
 	[Fact]
 	public void AllServicesAreRegistered()
 	{

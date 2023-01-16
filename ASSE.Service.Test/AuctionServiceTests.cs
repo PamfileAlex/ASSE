@@ -1,16 +1,28 @@
-﻿using ASSE.Core.Services;
+﻿// --------------------------------------------------------------------------------------
+// <copyright file="AuctionServiceTests.cs" company="Transilvania University of Brasov">
+// Student: Pamfile Alex
+// Course: Arhitectura sistemelor software enterprise. Platforma .NET
+// University: Universitatea Transilvania din Brasov
+// </copyright>
+// --------------------------------------------------------------------------------------
+
+using ASSE.Core.Services;
+using ASSE.Core.Test;
+using ASSE.Core.Test.xUnit;
 using ASSE.DataMapper.Interfaces;
 using ASSE.DomainModel.Models;
 using ASSE.DomainModel.Validators;
 using ASSE.Service.Implementations;
-using ASSE.Core.Test.xUnit;
 using FluentAssertions;
 using FluentValidation;
 using Moq;
-using ASSE.Core.Test;
 using Serilog;
 
 namespace ASSE.Service.Tests;
+
+/// <summary>
+/// Tests for <see cref="AuctionService"/>.
+/// </summary>
 public class AuctionServiceTests
 {
 	private readonly IValidator<Auction> _validator;
@@ -21,6 +33,9 @@ public class AuctionServiceTests
 	private readonly Mock<IAuctionDataAccess> _mockDataAccess;
 	private readonly Mock<IDateTimeProvider> _mockDateTimeProvider;
 
+	/// <summary>
+	/// Initializes a new instance of the <see cref="AuctionServiceTests"/> class.
+	/// </summary>
 	public AuctionServiceTests()
 	{
 		_mockLogger = new Mock<ILogger>();
@@ -34,6 +49,10 @@ public class AuctionServiceTests
 		_mockValidator = new Mock<IValidator<Auction>>();
 	}
 
+	/// <summary>
+	/// Gets a new valid <see cref="Auction"/>.
+	/// </summary>
+	/// <returns>Returns a valid auction.</returns>
 	public static Auction GetValidAuction()
 	{
 		return new Auction()
@@ -42,16 +61,20 @@ public class AuctionServiceTests
 			OwnerId = 1,
 			ProductId = 1,
 			CurrencyId = 1,
-			//BuyerId = 1,
 			Description = "Description",
 			StartDate = new DateTime(2023, 1, 1),
 			EndDate = new DateTime(2023, 1, 2),
 			StartingPrice = 10,
-			//CurrentPrice = 15,
-			IsActive = true
+			IsActive = true,
 		};
 	}
 
+	/// <summary>
+	/// Gets a new valid <see cref="Auction"/> for update.
+	/// </summary>
+	/// <param name="buyerId">Buyer identity param.</param>
+	/// <param name="currentPrice">Current price param.</param>
+	/// <returns>Returns a valid auction.</returns>
 	public static Auction GetValidUpdateAuction(int? buyerId = 2, double? currentPrice = 15.0)
 	{
 		var auction = GetValidAuction();
@@ -60,6 +83,9 @@ public class AuctionServiceTests
 		return auction;
 	}
 
+	/// <summary>
+	/// Test that validator is called on Add method on passing validator.
+	/// </summary>
 	[Fact]
 	public void Add_ValidatorIsCalled_Passes()
 	{
@@ -85,6 +111,9 @@ public class AuctionServiceTests
 		_mockConfigProvider.Verify(x => x.MaxAuctions);
 	}
 
+	/// <summary>
+	/// Test that validator is called on Add method on failing validator.
+	/// </summary>
 	[Fact]
 	public void Add_ValidatorIsCalled_Fails()
 	{
@@ -104,6 +133,10 @@ public class AuctionServiceTests
 		_mockDataAccess.Verify(x => x.Add(data), Times.Never());
 	}
 
+	/// <summary>
+	/// Test that Add method returns expected id.
+	/// </summary>
+	/// <param name="id">Parametrized id value.</param>
 	[Theory]
 	[InlineData(1)]
 	[InlineData(10)]
@@ -125,6 +158,9 @@ public class AuctionServiceTests
 		_mockDataAccess.Verify(x => x.GetAllActiveByOwnerId(It.IsAny<int>()));
 	}
 
+	/// <summary>
+	/// Test that Add method returns default when validator fails for invalid <see cref="Auction"/>.
+	/// </summary>
 	[Fact]
 	public void Add_InvalidAuction_ValidationFails_ReturnsDefault()
 	{
@@ -149,6 +185,11 @@ public class AuctionServiceTests
 		yield return new object?[] { 20, null };
 	}
 
+	/// <summary>
+	/// Test GetById method.
+	/// </summary>
+	/// <param name="id">Parametrized id value.</param>
+	/// <param name="data">Parametrized data value.</param>
 	[ComplexTheory]
 	[MemberData(nameof(GetAuctionById))]
 	public void GetById_ProvidedId_ReturnsExpected(int id, Auction? data)
@@ -171,21 +212,30 @@ public class AuctionServiceTests
 		yield return new object[] { false, Times.Never(), new Auction() };
 	}
 
+	/// <summary>
+	/// Test for Update method.
+	/// </summary>
+	/// <param name="expected">Expected result.</param>
+	/// <param name="times">Times the data access Update method gets called.</param>
+	/// <param name="data">Parametrized data value.</param>
 	[ComplexTheory]
 	[MemberData(nameof(UpdateAuctions))]
-	public void Update_ProvidedAuction_ReturnsProvided(bool status, Times times, Auction data)
+	public void Update_ProvidedAuction_ReturnsProvided(bool expected, Times times, Auction data)
 	{
 		_mockDataAccess.Setup(x => x.Update(data))
-			.Returns(status);
+			.Returns(expected);
 
 		var service = new AuctionService(_mockDataAccess.Object, _validator, _mockConfigProvider.Object);
 
 		var result = service.Update(data);
 
-		result.Should().Be(status);
+		result.Should().Be(expected);
 		_mockDataAccess.Verify(x => x.Update(data), times);
 	}
 
+	/// <summary>
+	/// Test Update method with valid <see cref="Auction"/>.
+	/// </summary>
 	[Fact]
 	public void Update_ValidatePrice_ValidAuction()
 	{
@@ -205,6 +255,9 @@ public class AuctionServiceTests
 		_mockDataAccess.Verify(x => x.Get(data.Id));
 	}
 
+	/// <summary>
+	/// Test Update method early exit for Validate Price method.
+	/// </summary>
 	[Fact]
 	public void Update_ValidatePrice_EarlyExit()
 	{
@@ -231,6 +284,12 @@ public class AuctionServiceTests
 		yield return new object?[] { GetValidUpdateAuction(), new Auction() { CurrentPrice = 1.0 }, Times.Once() };
 	}
 
+	/// <summary>
+	/// Test Update Validate Price invalid <see cref="Auction"/>.
+	/// </summary>
+	/// <param name="data">Parametrized data value.</param>
+	/// <param name="previous">Parametrized previous data value.</param>
+	/// <param name="getTimes">Times the Get method of data access gets called.</param>
 	[ComplexTheory]
 	[MemberData(nameof(Update_ValidatePrice_InvalidAuctions))]
 	public void Update_ValidatePrice_Invalid(Auction data, Auction? previous, Times getTimes)
@@ -249,32 +308,43 @@ public class AuctionServiceTests
 		_mockDataAccess.Verify(x => x.Get(data.Id), getTimes);
 	}
 
+	/// <summary>
+	/// Test Delete method.
+	/// </summary>
+	/// <param name="expected">Expected result.</param>
 	[Theory]
 	[InlineData(true)]
 	[InlineData(false)]
-	public void Delete_AnyId_ReturnsExpected(bool status)
+	public void Delete_AnyId_ReturnsExpected(bool expected)
 	{
 		_mockDataAccess.Setup(x => x.Delete(It.IsAny<int>()))
-			.Returns(status);
+			.Returns(expected);
 
 		var service = new AuctionService(_mockDataAccess.Object, _validator, _mockConfigProvider.Object);
 
 		var result = service.Delete(1);
 
-		result.Should().Be(status);
+		result.Should().Be(expected);
 		_mockDataAccess.Verify(x => x.Delete(It.IsAny<int>()));
 	}
 
 	private static IEnumerable<object[]> GetAll()
 	{
 		yield return new object[] { new List<Auction>() };
-		yield return new object[] { new List<Auction>() {
+		yield return new object[]
+		{
+			new List<Auction>()
+			{
 				GetValidAuction(),
-				GetValidAuction()
-			}
+				GetValidAuction(),
+			},
 		};
 	}
 
+	/// <summary>
+	/// Test GetAll method.
+	/// </summary>
+	/// <param name="data">Parametrized list of auctions.</param>
 	[ComplexTheory]
 	[MemberData(nameof(GetAll))]
 	public void GetAll_ProvidedInput_ReturnsProvided(List<Auction> data)
@@ -290,6 +360,10 @@ public class AuctionServiceTests
 		_mockDataAccess.Verify(x => x.GetAll());
 	}
 
+	/// <summary>
+	/// Test GetAllActive method.
+	/// </summary>
+	/// <param name="data">Parametrized list of auctions.</param>
 	[ComplexTheory]
 	[MemberData(nameof(GetAll))]
 	public void GetAllActive_ProvidedInput_ReturnsProvided(List<Auction> data)
@@ -305,6 +379,10 @@ public class AuctionServiceTests
 		_mockDataAccess.Verify(x => x.GetAllActive());
 	}
 
+	/// <summary>
+	/// Test GetAllActiveByOwnerId method.
+	/// </summary>
+	/// <param name="data">Parametrized list of auctions.</param>
 	[ComplexTheory]
 	[MemberData(nameof(GetAll))]
 	public void GetAllActiveByOwnerId_ProvidedInput_ReturnsProvided(List<Auction> data)
@@ -326,9 +404,15 @@ public class AuctionServiceTests
 		yield return new object[] { false, GetValidAuction(), new List<Auction>() { GetValidAuction() } };
 	}
 
+	/// <summary>
+	/// Test ValidateLevenshteinDistance method.
+	/// </summary>
+	/// <param name="expected">Expected result.</param>
+	/// <param name="auction">Parametrized auction data.</param>
+	/// <param name="auctions">Parametrized list of auctions.</param>
 	[ComplexTheory]
 	[MemberData(nameof(ValidateLevenshteinDistanceData))]
-	public void ValidateLevenshteinDistance(bool status, Auction auction, List<Auction> auctions)
+	public void ValidateLevenshteinDistance(bool expected, Auction auction, List<Auction> auctions)
 	{
 		_mockDataAccess.Setup(x => x.GetAllActiveByOwnerId(auction.OwnerId))
 			.Returns(auctions);
@@ -337,10 +421,13 @@ public class AuctionServiceTests
 
 		var result = service.ValidateLevenshteinDistance(auction);
 
-		result.Should().Be(status);
+		result.Should().Be(expected);
 		_mockDataAccess.Verify(x => x.GetAllActiveByOwnerId(auction.OwnerId));
 	}
 
+	/// <summary>
+	/// Test that Add fails on valid <see cref="Auction"/> because of LevenshteinDistance check.
+	/// </summary>
 	[Fact]
 	public void Add_ValidAuction_FailsLevenshteinDistance()
 	{
@@ -365,9 +452,14 @@ public class AuctionServiceTests
 		yield return new object[] { false, new List<Auction>() { new Auction(), new Auction() } };
 	}
 
+	/// <summary>
+	/// Test ValidateMaxAuctions method.
+	/// </summary>
+	/// <param name="expected">Expected result.</param>
+	/// <param name="auctions">List of auctions.</param>
 	[ComplexTheory]
 	[MemberData(nameof(ValidateMaxAuctionsData))]
-	public void ValidateMaxAuctions(bool status, List<Auction> auctions)
+	public void ValidateMaxAuctions(bool expected, List<Auction> auctions)
 	{
 		var data = GetValidAuction();
 
@@ -380,11 +472,14 @@ public class AuctionServiceTests
 
 		var result = service.ValidateMaxAuctions(data);
 
-		result.Should().Be(status);
+		result.Should().Be(expected);
 		_mockDataAccess.Verify(x => x.GetAllActiveByOwnerId(data.OwnerId));
 		_mockConfigProvider.Verify(x => x.MaxAuctions);
 	}
 
+	/// <summary>
+	/// Test that Add fails on valid <see cref="Auction"/> because of maximum number of auctions reached check.
+	/// </summary>
 	[Fact]
 	public void Add_ValidAuction_FailsMaxAuctions()
 	{
