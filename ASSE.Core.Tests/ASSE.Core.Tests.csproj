@@ -30,8 +30,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ASSE.Core.Test\ASSE.Core.Test.csproj" />
     <ProjectReference Include="..\ASSE.Core\ASSE.Core.csproj" />
-    <ProjectReference Include="..\ASSE.TestCore\ASSE.Core.Test.csproj" />
   </ItemGroup>
 
 	<Target Name="CopyCustomContent" AfterTargets="AfterBuild">
