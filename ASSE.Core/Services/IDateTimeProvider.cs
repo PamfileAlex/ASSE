@@ -1,4 +1,8 @@
 ﻿namespace ASSE.Core.Services;
+
+/// <summary>
+/// Represents a <see cref="DateTime"/> provider that is meant to be mocked.
+/// </summary>
 public interface IDateTimeProvider
 {
 	/// <summary>

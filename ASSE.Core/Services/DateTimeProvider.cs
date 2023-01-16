@@ -1,4 +1,6 @@
 ﻿namespace ASSE.Core.Services;
+
+/// <inheritdoc/>
 public class DateTimeProvider : IDateTimeProvider
 {
 	/// <inheritdoc/>

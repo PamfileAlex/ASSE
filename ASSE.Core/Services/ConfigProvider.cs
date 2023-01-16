@@ -2,19 +2,34 @@
 using Serilog;
 
 namespace ASSE.Core.Services;
+
+/// <summary>
+/// <see cref="IConfigProvider"/> implementation specific for App.config
+/// using <see cref="ConfigurationManager"/>.
+/// </summary>
 public class ConfigProvider : IConfigProvider
 {
 	private readonly ILogger _logger;
 
-	public string? PostgresConnectionString => GetConnectionString("PostgresConnection");
-	public int MaxAuctions => GetValue<int>("MaxAuctions");
-	public double InitialScore => GetValue<double>("InitialScore");
-
+	/// <summary>
+	/// Initializes a new instance of the <see cref="ConfigProvider"/> class.
+	/// </summary>
+	/// <param name="logger">Serilog <see cref="ILogger"/> instance.</param>
 	public ConfigProvider(ILogger logger)
 	{
 		_logger = logger;
 	}
 
+	/// <inheritdoc/>
+	public string? PostgresConnectionString => GetConnectionString("PostgresConnection");
+
+	/// <inheritdoc/>
+	public int MaxAuctions => GetValue<int>("MaxAuctions") ?? default;
+
+	/// <inheritdoc/>
+	public double InitialScore => GetValue<double>("InitialScore") ?? default;
+
+	/// <inheritdoc/>
 	public string? GetConnectionString(string key)
 	{
 		var conn = ConfigurationManager.ConnectionStrings[key];
@@ -22,26 +37,30 @@ public class ConfigProvider : IConfigProvider
 		{
 			return null;
 		}
+
 		return conn.ConnectionString;
 	}
 
+	/// <inheritdoc/>
 	public string? GetValue(string key)
 	{
 		_logger.Debug("Attempting to get value from config file with key {key}", key);
 		return ConfigurationManager.AppSettings.Get(key);
 	}
 
-	public T GetValue<T>(string key) where T : struct
+	/// <inheritdoc/>
+	public T? GetValue<T>(string key)
+		where T : struct
 	{
 		try
 		{
-			string value = GetValue(key);
+			string? value = GetValue(key);
 			return (T)Convert.ChangeType(value, typeof(T));
 		}
 		catch
 		{
 			_logger.Warning("Failed to get value from config file with key {key}", key);
-			return default;
+			return null;
 		}
 	}
 }
