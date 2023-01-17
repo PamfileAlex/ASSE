@@ -27,6 +27,7 @@ public class AuctionServiceTests
 {
 	private readonly IValidator<Auction> _validator;
 	private readonly IConfigProvider _configProvider;
+	private readonly IDateTimeProvider _dateTimeProvider;
 	private readonly Mock<ILogger> _mockLogger;
 	private readonly Mock<IConfigProvider> _mockConfigProvider;
 	private readonly Mock<IValidator<Auction>> _mockValidator;
@@ -40,6 +41,7 @@ public class AuctionServiceTests
 	{
 		_mockLogger = new Mock<ILogger>();
 		_configProvider = new ConfigProvider(_mockLogger.Object);
+		_dateTimeProvider = new DateTimeProvider();
 		_mockConfigProvider = new Mock<IConfigProvider>();
 		_mockDateTimeProvider = new Mock<IDateTimeProvider>();
 		_mockDateTimeProvider.Setup(x => x.Now)
@@ -100,7 +102,7 @@ public class AuctionServiceTests
 		_mockConfigProvider.Setup(x => x.MaxAuctions)
 			.Returns(1);
 
-		var service = new AuctionService(_mockDataAccess.Object, _mockValidator.Object, _mockConfigProvider.Object);
+		var service = new AuctionService(_mockDataAccess.Object, _mockValidator.Object, _mockConfigProvider.Object, _mockDateTimeProvider.Object);
 
 		var result = service.Add(data);
 
@@ -124,7 +126,7 @@ public class AuctionServiceTests
 		_mockDataAccess.Setup(x => x.Add(data))
 			.Returns(1);
 
-		var service = new AuctionService(_mockDataAccess.Object, _mockValidator.Object, _mockConfigProvider.Object);
+		var service = new AuctionService(_mockDataAccess.Object, _mockValidator.Object, _mockConfigProvider.Object, _mockDateTimeProvider.Object);
 
 		var result = service.Add(data);
 
@@ -149,7 +151,7 @@ public class AuctionServiceTests
 		_mockDataAccess.Setup(x => x.GetAllActiveByOwnerId(It.IsAny<int>()))
 			.Returns(new List<Auction>());
 
-		var service = new AuctionService(_mockDataAccess.Object, _validator, _configProvider);
+		var service = new AuctionService(_mockDataAccess.Object, _validator, _configProvider, _mockDateTimeProvider.Object);
 
 		var result = service.Add(data);
 
@@ -168,7 +170,7 @@ public class AuctionServiceTests
 		_mockDataAccess.Setup(x => x.Add(data))
 			.Returns(1);
 
-		var service = new AuctionService(_mockDataAccess.Object, _validator, _mockConfigProvider.Object);
+		var service = new AuctionService(_mockDataAccess.Object, _validator, _mockConfigProvider.Object, _mockDateTimeProvider.Object);
 
 		var result = service.Add(data);
 
@@ -197,7 +199,7 @@ public class AuctionServiceTests
 		_mockDataAccess.Setup(x => x.Get(id))
 			.Returns(data);
 
-		var service = new AuctionService(_mockDataAccess.Object, _validator, _mockConfigProvider.Object);
+		var service = new AuctionService(_mockDataAccess.Object, _validator, _mockConfigProvider.Object, _mockDateTimeProvider.Object);
 
 		var result = service.Get(id);
 
@@ -225,7 +227,7 @@ public class AuctionServiceTests
 		_mockDataAccess.Setup(x => x.Update(data))
 			.Returns(expected);
 
-		var service = new AuctionService(_mockDataAccess.Object, _validator, _mockConfigProvider.Object);
+		var service = new AuctionService(_mockDataAccess.Object, _validator, _mockConfigProvider.Object, _mockDateTimeProvider.Object);
 
 		var result = service.Update(data);
 
@@ -246,7 +248,7 @@ public class AuctionServiceTests
 		_mockDataAccess.Setup(x => x.Get(data.Id))
 			.Returns(GetValidAuction());
 
-		var service = new AuctionService(_mockDataAccess.Object, _validator, _mockConfigProvider.Object);
+		var service = new AuctionService(_mockDataAccess.Object, _validator, _mockConfigProvider.Object, _mockDateTimeProvider.Object);
 
 		var result = service.Update(data);
 
@@ -266,7 +268,7 @@ public class AuctionServiceTests
 		_mockDataAccess.Setup(x => x.Update(data))
 			.Returns(true);
 
-		var service = new AuctionService(_mockDataAccess.Object, _validator, _mockConfigProvider.Object);
+		var service = new AuctionService(_mockDataAccess.Object, _validator, _mockConfigProvider.Object, _mockDateTimeProvider.Object);
 
 		var result = service.Update(data);
 
@@ -299,7 +301,7 @@ public class AuctionServiceTests
 		_mockDataAccess.Setup(x => x.Get(data.Id))
 			.Returns(previous);
 
-		var service = new AuctionService(_mockDataAccess.Object, _validator, _mockConfigProvider.Object);
+		var service = new AuctionService(_mockDataAccess.Object, _validator, _mockConfigProvider.Object, _mockDateTimeProvider.Object);
 
 		var result = service.Update(data);
 
@@ -320,7 +322,7 @@ public class AuctionServiceTests
 		_mockDataAccess.Setup(x => x.Delete(It.IsAny<int>()))
 			.Returns(expected);
 
-		var service = new AuctionService(_mockDataAccess.Object, _validator, _mockConfigProvider.Object);
+		var service = new AuctionService(_mockDataAccess.Object, _validator, _mockConfigProvider.Object, _mockDateTimeProvider.Object);
 
 		var result = service.Delete(1);
 
@@ -352,7 +354,7 @@ public class AuctionServiceTests
 		_mockDataAccess.Setup(x => x.GetAll())
 			.Returns(data);
 
-		var service = new AuctionService(_mockDataAccess.Object, _validator, _mockConfigProvider.Object);
+		var service = new AuctionService(_mockDataAccess.Object, _validator, _mockConfigProvider.Object, _mockDateTimeProvider.Object);
 
 		var result = service.GetAll();
 
@@ -371,7 +373,7 @@ public class AuctionServiceTests
 		_mockDataAccess.Setup(x => x.GetAllActive())
 			.Returns(data);
 
-		var service = new AuctionService(_mockDataAccess.Object, _validator, _mockConfigProvider.Object);
+		var service = new AuctionService(_mockDataAccess.Object, _validator, _mockConfigProvider.Object, _mockDateTimeProvider.Object);
 
 		var result = service.GetAllActive();
 
@@ -390,7 +392,7 @@ public class AuctionServiceTests
 		_mockDataAccess.Setup(x => x.GetAllActiveByOwnerId(It.IsAny<int>()))
 			.Returns(data);
 
-		var service = new AuctionService(_mockDataAccess.Object, _validator, _mockConfigProvider.Object);
+		var service = new AuctionService(_mockDataAccess.Object, _validator, _mockConfigProvider.Object, _mockDateTimeProvider.Object);
 
 		var result = service.GetAllActiveByOwnerId(1);
 
@@ -417,7 +419,7 @@ public class AuctionServiceTests
 		_mockDataAccess.Setup(x => x.GetAllActiveByOwnerId(auction.OwnerId))
 			.Returns(auctions);
 
-		var service = new AuctionService(_mockDataAccess.Object, _validator, _mockConfigProvider.Object);
+		var service = new AuctionService(_mockDataAccess.Object, _validator, _mockConfigProvider.Object, _mockDateTimeProvider.Object);
 
 		var result = service.ValidateLevenshteinDistance(auction);
 
@@ -436,7 +438,7 @@ public class AuctionServiceTests
 		_mockDataAccess.Setup(x => x.GetAllActiveByOwnerId(data.OwnerId))
 			.Returns(new List<Auction>() { GetValidAuction() });
 
-		var service = new AuctionService(_mockDataAccess.Object, _validator, _mockConfigProvider.Object);
+		var service = new AuctionService(_mockDataAccess.Object, _validator, _mockConfigProvider.Object, _mockDateTimeProvider.Object);
 
 		var result = service.Add(data);
 
@@ -468,7 +470,7 @@ public class AuctionServiceTests
 		_mockConfigProvider.Setup(x => x.MaxAuctions)
 			.Returns(2);
 
-		var service = new AuctionService(_mockDataAccess.Object, _validator, _mockConfigProvider.Object);
+		var service = new AuctionService(_mockDataAccess.Object, _validator, _mockConfigProvider.Object, _mockDateTimeProvider.Object);
 
 		var result = service.ValidateMaxAuctions(data);
 
@@ -490,7 +492,7 @@ public class AuctionServiceTests
 		_mockConfigProvider.Setup(x => x.MaxAuctions)
 			.Returns(1);
 
-		var service = new AuctionService(_mockDataAccess.Object, _validator, _mockConfigProvider.Object);
+		var service = new AuctionService(_mockDataAccess.Object, _validator, _mockConfigProvider.Object, _mockDateTimeProvider.Object);
 
 		var result = service.Add(data);
 
@@ -498,5 +500,47 @@ public class AuctionServiceTests
 		_mockDataAccess.Verify(x => x.GetAllActiveByOwnerId(data.OwnerId));
 		_mockDataAccess.Verify(x => x.Add(data), Times.Never());
 		_mockConfigProvider.Verify(x => x.MaxAuctions);
+	}
+
+	private static IEnumerable<object?[]> CheckAndClose_EarlyExit_Data()
+	{
+		yield return new object?[] { null };
+		yield return new object?[] { new Auction() { IsActive = false } };
+	}
+
+	/// <summary>
+	/// Tests early exit condition for <see cref="AuctionService.CheckAndClose(Auction?)"/>.
+	/// </summary>
+	/// <param name="data">Parametrized data param.</param>
+	[ComplexTheory]
+	[MemberData(nameof(CheckAndClose_EarlyExit_Data))]
+	public void CheckAndClose_EarlyExit(Auction? data)
+	{
+		var service = new AuctionService(_mockDataAccess.Object, _validator, _mockConfigProvider.Object, _mockDateTimeProvider.Object);
+
+		service.CheckAndClose(data);
+
+		_mockDataAccess.Verify(x => x.Update(It.IsAny<Auction>()), Times.Never());
+		_mockDateTimeProvider.Verify(x => x.Now, Times.Never());
+	}
+
+	/// <summary>
+	/// Test that for auction that ended, the update method is called.
+	/// </summary>
+	[Fact]
+	public void CheckAndClose_CallsUpdate()
+	{
+		var data = GetValidAuction();
+		_mockDataAccess.Setup(x => x.Update(data))
+			.Returns(true);
+		_mockDateTimeProvider.Setup(x => x.Now)
+			.Returns(new DateTime(2023, 2, 2));
+
+		var service = new AuctionService(_mockDataAccess.Object, _validator, _mockConfigProvider.Object, _mockDateTimeProvider.Object);
+
+		service.CheckAndClose(data);
+
+		_mockDataAccess.Verify(x => x.Update(It.IsAny<Auction>()));
+		_mockDateTimeProvider.Verify(x => x.Now);
 	}
 }
