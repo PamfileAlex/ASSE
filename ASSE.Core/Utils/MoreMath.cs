@@ -22,4 +22,20 @@ public static class MoreMath
 	{
 		return values.Min();
 	}
+
+	/// <summary>
+	/// Calculates median of numbers.
+	/// </summary>
+	/// <param name="numbers"><see cref="List{T}"/> of numbers.</param>
+	/// <returns>median of numbers.</returns>
+	public static double Median(List<double> numbers)
+	{
+		numbers.Sort();
+
+		int size = numbers.Count;
+		int mid = size / 2;
+		return (size % 2 != 0) ?
+			numbers[mid] :
+			(numbers[mid] + numbers[mid - 1]) / 2;
+	}
 }

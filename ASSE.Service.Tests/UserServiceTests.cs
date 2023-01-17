@@ -104,7 +104,7 @@ public class UserServiceTests
 	[InlineData(1)]
 	[InlineData(10)]
 	[InlineData(100)]
-	public void Add_ValidRole_ValidationPasses_ReturnsValidId(int id)
+	public void Add_ValidUser_ValidationPasses_ReturnsValidId(int id)
 	{
 		var data = GetValidUser();
 		_mockDataAccess.Setup(x => x.Add(data))
@@ -122,7 +122,7 @@ public class UserServiceTests
 	/// Test that Add method returns default when validator fails for invalid <see cref="User"/>.
 	/// </summary>
 	[Fact]
-	public void Add_InvalidRole_ValidationFails_ReturnsDefault()
+	public void Add_InvalidUser_ValidationFails_ReturnsDefault()
 	{
 		var data = new User();
 		_mockDataAccess.Setup(x => x.Add(data))
@@ -139,7 +139,7 @@ public class UserServiceTests
 	private static IEnumerable<object?[]> GetUserById()
 	{
 		yield return new object?[] { 1, new User() { Id = 1, FirstName = "Max", LastName = "Verstappen", Score = 650 } };
-		yield return new object?[] { 10, new User() { Id = 1, FirstName = "Charles", LastName = "Leclerc", Score = 550 } };
+		yield return new object?[] { 10, new User() { Id = 10, FirstName = "Charles", LastName = "Leclerc", Score = 550 } };
 		yield return new object?[] { 20, null };
 	}
 
@@ -178,7 +178,7 @@ public class UserServiceTests
 	/// <param name="data">Parametrized data value.</param>
 	[ComplexTheory]
 	[MemberData(nameof(UpdateUsers))]
-	public void Update_ProvidedRole_ReturnsProvided(bool expected, Times times, User data)
+	public void Update_ProvidedUser_ReturnsProvided(bool expected, Times times, User data)
 	{
 		_mockDataAccess.Setup(x => x.Update(data))
 			.Returns(expected);

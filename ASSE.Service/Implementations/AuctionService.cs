@@ -22,6 +22,7 @@ namespace ASSE.Service.Implementations;
 public class AuctionService : EntityService<Auction, IAuctionDataAccess>, IAuctionService
 {
 	private readonly IConfigProvider _configProvider;
+	private readonly IDateTimeProvider _dateTimeProvider;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="AuctionService"/> class.
@@ -29,17 +30,39 @@ public class AuctionService : EntityService<Auction, IAuctionDataAccess>, IAucti
 	/// <param name="dataAccess"><see cref="Auction"/> data access.</param>
 	/// <param name="validator"><see cref="Auction"/> validator.</param>
 	/// <param name="configProvider"><see cref="IConfigProvider"/> instance.</param>
-	public AuctionService(IAuctionDataAccess dataAccess, IValidator<Auction> validator, IConfigProvider configProvider)
+	/// <param name="dateTimeProvider"><see cref="IDateTimeProvider"/> instance.</param>
+	public AuctionService(IAuctionDataAccess dataAccess, IValidator<Auction> validator, IConfigProvider configProvider, IDateTimeProvider dateTimeProvider)
 		: base(dataAccess, validator)
 	{
 		_configProvider = configProvider;
+		_dateTimeProvider = dateTimeProvider;
+	}
+
+	/// <inheritdoc/>
+	public override List<Auction> GetAll()
+	{
+		var auctions = base.GetAll();
+		Log.Debug("Checking for all auctions if they can be closed");
+		auctions.ForEach(CheckAndClose);
+		return auctions;
+	}
+
+	/// <inheritdoc/>
+	public override Auction? Get(int id)
+	{
+		var auction = base.Get(id);
+		CheckAndClose(auction);
+		return auction;
 	}
 
 	/// <inheritdoc/>
 	public List<Auction> GetAllActive()
 	{
 		Log.Debug("Getting all active");
-		return DataAccess.GetAllActive();
+		var auctions = DataAccess.GetAllActive();
+		Log.Debug("Checking for all auctions if they can be closed");
+		auctions.ForEach(CheckAndClose);
+		return auctions;
 	}
 
 	/// <inheritdoc/>
@@ -47,6 +70,18 @@ public class AuctionService : EntityService<Auction, IAuctionDataAccess>, IAucti
 	{
 		Log.Debug("Getting all active by ownerId: {ownerId}", ownerId);
 		return DataAccess.GetAllActiveByOwnerId(ownerId);
+	}
+
+	/// <inheritdoc/>
+	public bool CloseAuction(int loggedUserId, Auction auction)
+	{
+		if (loggedUserId != auction.OwnerId)
+		{
+			return false;
+		}
+
+		auction.IsActive = false;
+		return DataAccess.Update(auction);
 	}
 
 	/// <inheritdoc/>
@@ -177,5 +212,25 @@ public class AuctionService : EntityService<Auction, IAuctionDataAccess>, IAucti
 		}
 
 		return true;
+	}
+
+	/// <summary>
+	/// Checks and closes auction if it reached the end date.
+	/// </summary>
+	/// <param name="auction">Auction on which to check.</param>
+	public void CheckAndClose(Auction? auction)
+	{
+		Log.Debug("Checking if auction can be closed");
+		if (auction is null || !auction.IsActive)
+		{
+			return;
+		}
+
+		if (auction.EndDate < _dateTimeProvider.Now)
+		{
+			Log.Debug("Closing auction");
+			auction.IsActive = false;
+			DataAccess.Update(auction);
+		}
 	}
 }

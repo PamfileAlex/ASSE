@@ -11,6 +11,7 @@ using FluentValidation;
 using FluentValidation.Results;
 
 namespace ASSE.Core.Test;
+
 /// <summary>
 /// Static utily class for FluentValidation <see cref="IValidator{T}"/> tests.
 /// </summary>
