@@ -32,6 +32,16 @@ public interface IConfigProvider
 	double InitialScore { get; }
 
 	/// <summary>
+	/// Gets the number of days the user would not be able to add new auctions.
+	/// </summary>
+	int NumberOfDays { get; }
+
+	/// <summary>
+	/// Gets the minimum score a user can hit.
+	/// </summary>
+	double MinimumScore { get; }
+
+	/// <summary>
 	/// Gets the connection tring for the database used by <see cref="IDbConnection"/>.
 	/// </summary>
 	/// <param name="key">The value for key used to search for the connection string.</param>

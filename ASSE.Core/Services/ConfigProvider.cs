@@ -38,6 +38,12 @@ public class ConfigProvider : IConfigProvider
 	public double InitialScore => GetValue<double>("InitialScore") ?? default;
 
 	/// <inheritdoc/>
+	public int NumberOfDays => GetValue<int>("NumberOfDays") ?? default;
+
+	/// <inheritdoc/>
+	public double MinimumScore => GetValue<double>("MinimumScore") ?? default;
+
+	/// <inheritdoc/>
 	public string? GetConnectionString(string key)
 	{
 		var conn = ConfigurationManager.ConnectionStrings[key];

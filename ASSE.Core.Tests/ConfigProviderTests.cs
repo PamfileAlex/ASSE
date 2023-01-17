@@ -76,6 +76,8 @@ public class ConfigProviderTests
 	[InlineData("", null)]
 	[InlineData("MaxAuctions", "3")]
 	[InlineData("InitialScore", "500")]
+	[InlineData("NumberOfDays", "5")]
+	[InlineData("MinimumScore", "100")]
 	public void GetValue_ProvidedKey_ReturnsExpected(string key, string? expected)
 	{
 		var result = _configProvider.GetValue(key);
@@ -107,6 +109,32 @@ public class ConfigProviderTests
 		var result = _configProvider.GetValue<double>(key);
 
 		result.Should().Be(500.0);
+	}
+
+	/// <summary>
+	/// Test for <see cref="IConfigProvider.NumberOfDays"/>.
+	/// </summary>
+	[Fact]
+	public void GetValueInt_NumberOfDays_ReturnsExpected()
+	{
+		var key = "NumberOfDays";
+
+		var result = _configProvider.GetValue<int>(key);
+
+		result.Should().Be(5);
+	}
+
+	/// <summary>
+	/// Test for <see cref="IConfigProvider.MinimumScore"/>.
+	/// </summary>
+	[Fact]
+	public void GetValueDouble_MinimumScore_ReturnsExpected()
+	{
+		var key = "MinimumScore";
+
+		var result = _configProvider.GetValue<double>(key);
+
+		result.Should().Be(100.0);
 	}
 
 	/// <summary>
@@ -155,5 +183,27 @@ public class ConfigProviderTests
 		var result = _configProvider.InitialScore;
 
 		result.Should().Be(500.0);
+	}
+
+	/// <summary>
+	/// Test that <see cref="IConfigProvider.NumberOfDays"/> returns expected.
+	/// </summary>
+	[Fact]
+	public void NumberOfDaysProperty_ReturnsExpected()
+	{
+		var result = _configProvider.NumberOfDays;
+
+		result.Should().Be(5);
+	}
+
+	/// <summary>
+	/// Test that <see cref="IConfigProvider.MinimumScore"/> returns expected.
+	/// </summary>
+	[Fact]
+	public void MinimumScoreProperty_ReturnsExpected()
+	{
+		var result = _configProvider.MinimumScore;
+
+		result.Should().Be(100.0);
 	}
 }
