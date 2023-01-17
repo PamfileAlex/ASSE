@@ -29,7 +29,6 @@ namespace ASSE.Core.Test.xUnit
 		private readonly IMessageSink _messageSink;
 		private int _attributeNumber;
 		private int _rowNumber;
-		readonly int _timeout;
 
 		[EditorBrowsable(EditorBrowsableState.Never)]
 		[Obsolete("Use for deserialization only.")]
