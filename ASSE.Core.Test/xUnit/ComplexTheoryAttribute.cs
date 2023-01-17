@@ -19,7 +19,7 @@ using Xunit.Sdk;
 namespace ASSE.Core.Test.xUnit
 {
 	[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
-	[XunitTestCaseDiscoverer("ASSE.TestCore.xUnit.ComplexTheoryDiscoverer", "ASSE.TestCore")]
+	[XunitTestCaseDiscoverer("ASSE.Core.Test.xUnit.ComplexTheoryDiscoverer", "ASSE.Core.Test")]
 	public class ComplexTheoryAttribute : FactAttribute
 	{
 	}

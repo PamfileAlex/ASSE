@@ -25,6 +25,8 @@ public class LevenshteinDistanceTests
 	[InlineData("", "")]
 	[InlineData(",'-.!?", "")]
 	[InlineData("This, Is? A. Test!", "thisisatest")]
+	[InlineData("This is a normal sentence.", "thisisanormalsentence")]
+	[InlineData("TEST_another_StRiNg", "testanotherstring")]
 	public void Normalize(string input, string expected)
 	{
 		var result = LevenshteinDistance.Normalize(input);
