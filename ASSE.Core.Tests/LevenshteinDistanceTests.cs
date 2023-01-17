@@ -1,9 +1,26 @@
-﻿using ASSE.Core.Utils;
+﻿// --------------------------------------------------------------------------------------
+// <copyright file="LevenshteinDistanceTests.cs" company="Transilvania University of Brasov">
+// Student: Pamfile Alex
+// Course: Arhitectura sistemelor software enterprise. Platforma .NET
+// University: Universitatea Transilvania din Brasov
+// </copyright>
+// --------------------------------------------------------------------------------------
+
+using ASSE.Core.Utils;
 using FluentAssertions;
 
 namespace ASSE.Core.Tests;
+
+/// <summary>
+/// Class to test <see cref="LevenshteinDistance"/>.
+/// </summary>
 public class LevenshteinDistanceTests
 {
+	/// <summary>
+	/// Test for <see cref="LevenshteinDistance.Normalize(string)"/>.
+	/// </summary>
+	/// <param name="input">string to be normalized.</param>
+	/// <param name="expected">Expected normalized string.</param>
 	[Theory]
 	[InlineData("", "")]
 	[InlineData(",'-.!?", "")]
@@ -15,6 +32,12 @@ public class LevenshteinDistanceTests
 		result.Should().Be(expected);
 	}
 
+	/// <summary>
+	/// Test for <see cref="LevenshteinDistance.Calculate(string, string)"/>.
+	/// </summary>
+	/// <param name="first">First sequence.</param>
+	/// <param name="second">Second sequence.</param>
+	/// <param name="expected">Expected distance.</param>
 	[Theory]
 	[InlineData("", "", 0)]
 	[InlineData("This is a test", "ThisIsATest", 6)]
@@ -28,6 +51,12 @@ public class LevenshteinDistanceTests
 		result.Should().Be(expected);
 	}
 
+	/// <summary>
+	/// Test for <see cref="LevenshteinDistance.CalculateNormalized(string, string)(string, string)"/>.
+	/// </summary>
+	/// <param name="first">First sequence.</param>
+	/// <param name="second">Second sequence.</param>
+	/// <param name="expected">Expected distance.</param>
 	[Theory]
 	[InlineData("", "", 0)]
 	[InlineData("This is a test", "ThisIsATest", 0)]
@@ -41,6 +70,12 @@ public class LevenshteinDistanceTests
 		result.Should().Be(expected);
 	}
 
+	/// <summary>
+	/// Test for <see cref="LevenshteinDistance.AreDifferent(string, string)"/>.
+	/// </summary>
+	/// <param name="status">Expected status.</param>
+	/// <param name="first">First sequence.</param>
+	/// <param name="second">Second sequence.</param>
 	[Theory]
 	[InlineData(false, "", "")]
 	[InlineData(true, "qwertyuiop", "asdfghjkl")]

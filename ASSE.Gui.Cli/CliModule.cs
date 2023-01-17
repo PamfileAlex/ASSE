@@ -1,14 +1,27 @@
-﻿using ASSE.Core;
+﻿// --------------------------------------------------------------------------------------
+// <copyright file="CliModule.cs" company="Transilvania University of Brasov">
+// Student: Pamfile Alex
+// Course: Arhitectura sistemelor software enterprise. Platforma .NET
+// University: Universitatea Transilvania din Brasov
+// </copyright>
+// --------------------------------------------------------------------------------------
+
+using ASSE.Core;
 using ASSE.DataMapper;
-using ASSE.DataMapper.Services;
 using ASSE.DomainModel;
-using ASSE.Gui.Cli.Services;
 using ASSE.Service;
 using Autofac;
 
 namespace ASSE.Gui.Cli;
+
+/// <summary>
+/// Autofac module for the ASSE.Gui.Cli project. Used by the Autofac dependency injection engine.
+/// <br/>
+/// For more information about the Autofac <see cref="Module"/>, see <a href="https://autofac.readthedocs.io/en/latest/configuration/modules.html">here</a>.
+/// </summary>
 public class CliModule : Module
 {
+	/// <inheritdoc/>
 	protected override void Load(ContainerBuilder builder)
 	{
 		builder.RegisterModule<CoreModule>();
@@ -16,6 +29,6 @@ public class CliModule : Module
 		builder.RegisterModule<DataMapperModule>();
 		builder.RegisterModule<ServiceModule>();
 
-		//builder.RegisterType<SQLiteConnectionProvider>().As<IDbConnectionProvider>();
+		// builder.RegisterType<SQLiteConnectionProvider>().As<IDbConnectionProvider>();
 	}
 }
