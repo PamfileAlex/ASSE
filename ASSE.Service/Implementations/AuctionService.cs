@@ -42,6 +42,7 @@ public class AuctionService : EntityService<Auction, IAuctionDataAccess>, IAucti
 	public override List<Auction> GetAll()
 	{
 		var auctions = base.GetAll();
+		Log.Debug("Checking for all auctions if they can be closed");
 		auctions.ForEach(CheckAndClose);
 		return auctions;
 	}
@@ -59,6 +60,7 @@ public class AuctionService : EntityService<Auction, IAuctionDataAccess>, IAucti
 	{
 		Log.Debug("Getting all active");
 		var auctions = DataAccess.GetAllActive();
+		Log.Debug("Checking for all auctions if they can be closed");
 		auctions.ForEach(CheckAndClose);
 		return auctions;
 	}
@@ -68,6 +70,18 @@ public class AuctionService : EntityService<Auction, IAuctionDataAccess>, IAucti
 	{
 		Log.Debug("Getting all active by ownerId: {ownerId}", ownerId);
 		return DataAccess.GetAllActiveByOwnerId(ownerId);
+	}
+
+	/// <inheritdoc/>
+	public bool CloseAuction(int loggedUserId, Auction auction)
+	{
+		if (loggedUserId != auction.OwnerId)
+		{
+			return false;
+		}
+
+		auction.IsActive = false;
+		return DataAccess.Update(auction);
 	}
 
 	/// <inheritdoc/>
@@ -206,6 +220,7 @@ public class AuctionService : EntityService<Auction, IAuctionDataAccess>, IAucti
 	/// <param name="auction">Auction on which to check.</param>
 	public void CheckAndClose(Auction? auction)
 	{
+		Log.Debug("Checking if auction can be closed");
 		if (auction is null || !auction.IsActive)
 		{
 			return;
@@ -213,6 +228,7 @@ public class AuctionService : EntityService<Auction, IAuctionDataAccess>, IAucti
 
 		if (auction.EndDate < _dateTimeProvider.Now)
 		{
+			Log.Debug("Closing auction");
 			auction.IsActive = false;
 			DataAccess.Update(auction);
 		}

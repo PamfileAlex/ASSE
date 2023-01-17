@@ -540,7 +540,47 @@ public class AuctionServiceTests
 
 		service.CheckAndClose(data);
 
-		_mockDataAccess.Verify(x => x.Update(It.IsAny<Auction>()));
+		_mockDataAccess.Verify(x => x.Update(data));
 		_mockDateTimeProvider.Verify(x => x.Now);
+	}
+
+	/// <summary>
+	/// Test <see cref="AuctionService.CloseAuction(int, Auction)"/> that if logged user id differs
+	/// from <see cref="Auction.OwnerId"/>, false is returned.
+	/// </summary>
+	[Fact]
+	public void CloseAuction_LoggedUserIdDiffersFromOwnerId_ReturnsFalse()
+	{
+		var data = GetValidAuction();
+		_mockDataAccess.Setup(x => x.Update(data))
+			.Returns(true);
+
+		var service = new AuctionService(_mockDataAccess.Object, _validator, _mockConfigProvider.Object, _mockDateTimeProvider.Object);
+
+		var result = service.CloseAuction(2, data);
+
+		result.Should().Be(false);
+		_mockDataAccess.Verify(x => x.Update(data), Times.Never());
+	}
+
+	/// <summary>
+	/// Test <see cref="AuctionService.CloseAuction(int, Auction)"/> returns expected.
+	/// </summary>
+	/// <param name="expected">Expected value from data access.</param>
+	[Theory]
+	[InlineData(true)]
+	[InlineData(false)]
+	public void CloseAuction_CanCloseAuction_ReturnsExpected(bool expected)
+	{
+		var data = GetValidAuction();
+		_mockDataAccess.Setup(x => x.Update(data))
+			.Returns(expected);
+
+		var service = new AuctionService(_mockDataAccess.Object, _validator, _mockConfigProvider.Object, _mockDateTimeProvider.Object);
+
+		var result = service.CloseAuction(data.OwnerId, data);
+
+		result.Should().Be(expected);
+		_mockDataAccess.Verify(x => x.Update(data));
 	}
 }
